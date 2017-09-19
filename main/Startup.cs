@@ -36,7 +36,7 @@ namespace web
         {
             // Add framework services.
             services.AddMvc(options => {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
             services.AddDbContext<DwDbContext>(options => options.UseMySql(Configuration.GetConnectionString("mysql")));
             //services.AddSession();
