@@ -1,0 +1,36 @@
+@{
+    Layout = "_BlogLayout";
+}
+<script src="~/lib/jscookie.js"></script>
+<script src="~/js/blog/writeblog.js"></script>
+<title>撰写日志</title>
+<link rel="stylesheet" type="text/css" href="~/css/blog/writeblog.css">
+<div id="token">
+    @Html.AntiForgeryToken()
+</div>
+<p>标题：</p>
+<input type="text" id="title" />
+<br />
+<br />
+<p>正文：</p>
+<textarea id="content"></textarea>
+<br />
+<br />
+<p>标签：</p>
+<br />
+<div id="tags"></div>
+<br />
+<button id="addTag" class="layui-btn">添加标签</button>
+<br />
+<button id="submit" class="layui-btn">上传博客</button>
+<br />
+<div id="tagLayer" hidden>
+    <input type="text" id="tagText" />
+    <br />
+    <button id="createTag">新建标签</button>
+    <br />
+    <select id="tagList">
+        <option value="">请选择标签</option>
+    </select>
+    <button id="confirmAddTag">确认添加</button>
+</div>

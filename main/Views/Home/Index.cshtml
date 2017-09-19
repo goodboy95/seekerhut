@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "_HomeLayout";
+}
+
+<title>探索者之家--探索新世界的大门</title>
+<script src="~/lib/jscookie.js"></script>
+<script src="~/lib/md5.min.js"></script>
+<script src="~/js/index.js"></script>
+<link rel="stylesheet" type="text/css" href="~/css/index.css" />
+<div>Seeker Hut 探索者之家</div>
+<br />
+<div id="reg" hidden>
+  <p>用户注册</p>
+  <div id="token">
+    @Html.AntiForgeryToken()
+  </div>
+  <p>用户名：</p><input type="text" id="username" />
+  <p>密码：</p><input type="password" id="password" />
+  <br /><br />
+  <button id="regSubmit">注册</button>
+</div>
+
+<div id="login">
+  <p>用户登录</p>
+  <div id="token">
+    @Html.AntiForgeryToken()
+  </div>
+  <p>用户名：</p><input type="text" id="username" />
+  <p>密码：</p><input type="password" id="password" />
+  <br /><br />
+  <button id="loginSubmit">登录</button>
+  <button id="regWindow">注册账号</button>
+</div>
+
+<div id="userdata" hidden>
+  <p id="user">欢迎回来，</p>
+  <br />
+  <a href="/home/logout">退出登录</a>
+</div>
+
+<br />
+<br />
+<p>当前的登陆ip为：@ViewBag.CurIP </p>
+

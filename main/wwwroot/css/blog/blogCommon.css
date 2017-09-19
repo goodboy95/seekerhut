@@ -1,0 +1,25 @@
+#layui-nav, #mainarea{
+    width: 60%;
+    margin: 0 auto;
+}
+.layui-nav-item{
+    width: 20%;
+    text-align: center;
+    
+}
+@media screen {
+    .layui-nav-item > a{
+        font-size: 20px;
+    }
+}
+@media screen and (max-width: 1072px) {
+    .layui-nav-item > a{
+        font-size: 15px;
+    }
+}
+@media screen and (max-width: 908px) {
+    .layui-nav-item > a{
+        font-size: 10px;
+    }
+}
+

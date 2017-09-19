@@ -1,0 +1,33 @@
+@{
+    Layout = "_BlogLayout";
+}
+<script src="~/js/blog/content.js"></script>
+<link rel="stylesheet" href="~/css/blog/content.css" />
+<title>探索日志</title>
+
+<div>
+    <h1 id="title"></h1>
+    <div id="authorData">
+        <span>作者：</span><span id="author"></span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span>发布时间：</span><span id="createTime"></span>
+    </div>
+    <br />
+    <div>
+        <div id="content" contenteditable="false" style=""></div>
+    </div>
+    <button>
+</div>
+<div>
+    <div id="token">
+        @Html.AntiForgeryToken()
+    </div>
+    <p>回复：</p>
+    <div id="replyList">
+    </div>
+    <p>添加回复：</p>
+    <div>
+        <textarea id="replyText"></textarea>
+        <button id="replySubmit">发送</button>
+    </div>
+</div>

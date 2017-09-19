@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/layui/css/layui.css">
+    <!--<script src="~/lib/vue.js"></script>-->
+    <script src="~/lib/jquery.js"></script>
+    <script src="~/lib/layui/layui.js"></script>
+</head>
+<body>
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item layui-this"><a href="/home/index/">主页</a></li>
+        <li class="layui-nav-item"><a href="/blog/index/">博客</a></li>
+        <li class="layui-nav-item"><a href="/forum/index/">论坛(未实现)</a></li>
+        <li class="layui-nav-item"><a href=""></a></li>
+    </ul>
+    @RenderBody()
+</body>
+</html>
