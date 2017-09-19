@@ -1,4 +1,9 @@
+var authorID;
+function SocketReceive(data) {
+    console.log(data);
+}
 window.onload = function(){
+    SocketConnect(SocketReceive, error);
     document.getElementById("menu-myblog").classList.add("layui-this");
     var layedit, contentBox, 
         queryStr = window.location.href.split("?")[1], 
@@ -10,6 +15,7 @@ window.onload = function(){
     $.get("/api/blog/blog/", {id: id}, function(resp){
         if (resp.code == 0){
             var blog = resp.data.blog;
+            authorID = blog.authorID;
             document.getElementById("title").innerHTML = blog.title;
             document.getElementById("author").innerHTML = resp.data.authorName;
             document.getElementById("createTime").innerHTML = resp.data.createTime;
@@ -38,6 +44,7 @@ window.onload = function(){
 
     document.getElementById("replySubmit").onclick = function(){
         $.post("/api/blog/reply/", {
+            authorID: authorID,
             blogID: id,
             content: layedit.getContent(contentBox),
             __RequestVerificationToken: $("#token").find("input").val()

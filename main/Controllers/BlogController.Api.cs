@@ -6,6 +6,7 @@ using Domain.Entity;
 using Microsoft.Extensions.Logging;
 using Dao;
 using System.Collections.Generic;
+using model;
 
 namespace web.Api.Controllers
 {
@@ -116,12 +117,14 @@ namespace web.Api.Controllers
             return JsonReturn.ReturnSuccess(new {replyList = replyList});
         }
         [HttpPost("reply")]
-        public JsonReturn SaveReply([FromForm]long blogID, [FromForm]string content, [FromForm]long reReplyID)
+        public JsonReturn SaveReply([FromForm]long authorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long reReplyID)
         {
             var userID = Convert.ToInt64(Request.Cookies["id"]);
             var bre = new BlogReplyEntity(){BlogID = blogID, AuthorID = userID, Content = content, LikeID = new HashSet<long>(), ReReplyID = reReplyID};
             dbc.BlogReply.Add(bre);
             dbc.SaveChanges();
+            var notifyMsg = new { msgType = MessageType.blogReply.ToInt(), sender = userID }.ToString();
+            wsa.WriteMsg(authorID, notifyMsg).Wait();
             return JsonReturn.ReturnSuccess();
         }
     }
