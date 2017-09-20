@@ -1,7 +1,5 @@
 var authorID;
-function SocketReceive(data) {
-    console.log(data);
-}
+
 window.onload = function(){
     SocketConnect(SocketReceive, error);
     document.getElementById("menu-myblog").classList.add("layui-this");

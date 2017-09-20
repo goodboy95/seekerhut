@@ -124,7 +124,8 @@ namespace web.Api.Controllers
             dbc.BlogReply.Add(bre);
             dbc.SaveChanges();
             var notifyMsg = new { msgType = MessageType.blogReply.ToInt(), sender = userID }.ToString();
-            wsa.WriteMsg(authorID, notifyMsg).Wait();
+            //wsa.WriteMsg(authorID, notifyMsg).Wait();
+            wsa.WriteMsgDirect(notifyMsg);
             return JsonReturn.ReturnSuccess();
         }
     }

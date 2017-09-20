@@ -7,6 +7,9 @@ function SocketSend()
 {
     doSend(document.getElementById("sendtxt").value); 
 }
+function SocketReceive(data) {
+    console.log(data);
+}
 //关闭socket
 function SocketClose() {
     socket.close();
@@ -17,7 +20,7 @@ function SocketConnect(accept, error) {
     //创建websocket,并定义事件回调
     socket = new WebSocket(uri);
     //socket.onopen = function (e) {};
-    //socket.onclose = function (e) {};
+    socket.onclose = function (e) { close(); };
     socket.onmessage = function (e) { accept(e.data); };
     socket.onerror = function (e) { error(e.data); };
 }  
@@ -34,12 +37,13 @@ function open() {
 //接收数据回调
 function accept(result) {
     document.getElementById("output").innerText=result;
-}
+}*/
 //关闭连接回调
 function close() {
-    document.getElementById("message").innerText="连接关闭";
+    //document.getElementById("message").innerText="连接关闭";
+    SocketConnect(SocketReceive, error);
 }
-*/
+
 //错误回调
 function error(result) {
     alert("错误："+result);
