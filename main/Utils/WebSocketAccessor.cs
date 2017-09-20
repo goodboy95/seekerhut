@@ -10,11 +10,21 @@ using Newtonsoft.Json.Linq;
 
 namespace Utils
 {
+    public class WebSocketWithId
+    {
+        public long id;
+        public WebSocket webSocket;
+        public WebSocketWithId(long id, WebSocket ws)
+        {
+            this.id = id;
+            webSocket = ws;
+        }
+    }
     public class WebSocketAccessor
     {
         public HttpContext context;
         public WebSocket webSocket;
-        private static Dictionary<long, Stack<string>> msgDic;
+        private static Dictionary<long, Stack<string>> msgDic; //所有等待通过websocket发送的消息
         private static bool msgCanAccess; //msg被读写时加此锁(置为false)，防止访问（毕竟对于stack而言，读和写没啥差别）
         static WebSocketAccessor()
         {
@@ -37,10 +47,12 @@ namespace Utils
             if (context.WebSockets.IsWebSocketRequest)
             {
                 //接收客户端
-                webSocket = context.WebSockets.AcceptWebSocketAsync().Result;
+                var webSocket = context.WebSockets.AcceptWebSocketAsync().Result;
+                long uid = Convert.ToInt64(context.Request.Cookies["id"]);
+                var namedWebSocket = new WebSocketWithId(uid, webSocket);
                 //启用线程发送接收客户端数据
                 //new Thread(Accept).Start(webSocket);
-                new Thread(MsgSend).Start(webSocket);
+                new Thread(MsgSend).Start(namedWebSocket);
                 while (webSocket?.State == WebSocketState.Open) 
                 {
                      Thread.Sleep(10000); 
@@ -66,9 +78,10 @@ namespace Utils
         /// <param name="obj"></param>
         void MsgSend(object obj)
         {
-            var webSocket = obj as WebSocket;
+            var namedWebSocket = obj as WebSocketWithId;
             var acceptArr = new byte[1024];
-            long.TryParse(context.Request.Cookies["id"], out long uid);
+            var uid = namedWebSocket.id;
+            var webSocket = namedWebSocket.webSocket;
             while (webSocket?.State == WebSocketState.Open)
             {
                 if (!msgCanAccess) { Thread.Sleep(10); }
