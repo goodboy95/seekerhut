@@ -43,8 +43,8 @@ namespace web.Controllers
             var curUser = (from u in dbc.User where u.ID == userID select new {u.Token, u.ExpireTime}).FirstOrDefault();
             string realToken = curUser?.Token;
             var tokenTime = curUser?.ExpireTime;
-            if (wsa == null) { wsa = new WebSocketAccessor(); }
-            if (wsa.webSocket?.State != WebSocketState.Open) { wsa.SocketOpen(context.HttpContext); }
+            if (wsa == null) { wsa = new WebSocketAccessor(context.HttpContext); }
+            if (wsa.webSocket?.State != WebSocketState.Open) { wsa.SocketOpen(); }
             if (curUser == null || token == null || realToken == null || token != realToken || tokenTime < DateTime.Now)
             {
                 LoginFail(context);

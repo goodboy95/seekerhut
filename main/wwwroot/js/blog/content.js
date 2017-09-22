@@ -1,7 +1,7 @@
 var authorID;
 
 window.onload = function(){
-    SocketConnect(SocketReceive, error);
+    SocketConnect(close, SocketReceive, error);
     document.getElementById("menu-myblog").classList.add("layui-this");
     var layedit, contentBox, 
         queryStr = window.location.href.split("?")[1], 

@@ -29,6 +29,7 @@ function getBlogList(pageNo, pageSize){
 }
 
 window.onload = function(){
+    SocketConnect(close, SocketReceive, error);
     document.getElementById("menu-myblog").classList.add("layui-this");
     layui.use('laypage', function(){
         laypage = layui.laypage;

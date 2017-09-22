@@ -34,29 +34,32 @@ namespace Middleware
             }
             finally
             {
-                var statusCode = context.Response.StatusCode;
-                var requestController = context.Request.Path.ToString().Split('/')[1].ToLower();
-                /*if (requestController == "api")
+                if (!context.Response.HasStarted)
                 {
-                    switch(statusCode)
+                    var statusCode = context.Response.StatusCode;
+                    var requestController = context.Request.Path.ToString().Split('/')[1].ToLower();
+                    if (requestController == "api")
                     {
-                        case 404: context.Response.Redirect("/error/api404"); break;
-                        case 500: context.Response.Redirect("/error/api500"); break;
-                        default: break;
+                        switch(statusCode)
+                        {
+                            case 404: context.Response.Redirect("/error/api404"); break;
+                            case 500: context.Response.Redirect("/error/api500"); break;
+                            default: break;
+                        }
+                    }
+                    else
+                    {
+                        switch(statusCode)
+                        {
+                            case 404: context.Response.Redirect("/error/page404"); break;
+                            case 500: context.Response.Redirect("/error/page500"); break;
+                            
+                            default: break;
+                        }
                     }
                 }
-                else
-                {
-                    switch(statusCode)
-                    {
-                        case 404: context.Response.Redirect("/error/page404"); break;
-                        case 500: context.Response.Redirect("/error/page500"); break;
-                        
-                        default: break;
-                    }
-                }
-                await _next.Invoke(context);*/
-                if (statusCode == 404)
+                await _next.Invoke(context);
+            /*  if (statusCode == 404)
                 {
                     if (requestController == "api")
                     {
@@ -81,7 +84,7 @@ namespace Middleware
                         context.Request.Path = "/error/page500";
                         await _next.Invoke(context);
                     }
-                }
+                }*/
             }
         }
     }

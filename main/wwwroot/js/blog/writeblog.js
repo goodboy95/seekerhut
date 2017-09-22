@@ -7,6 +7,7 @@ function tagDelete(){
     document.getElementById(tagName).remove();
 }
 window.onload = function(){
+    SocketConnect(close, SocketReceive, error);
     document.getElementById("menu-writeblog").classList.add("layui-this");
     layui.use('layedit', function(){
         layedit = layui.layedit;

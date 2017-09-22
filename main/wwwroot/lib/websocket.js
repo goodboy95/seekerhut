@@ -1,22 +1,15 @@
-var socket;
+var socket = null;
 var uri = "ws://localhost:8080/";
-
 
 //发送方法
 function SocketSend()
 {
     doSend(document.getElementById("sendtxt").value); 
 }
-function SocketReceive(data) {
-    console.log(data);
-}
-//关闭socket
-function SocketClose() {
-    socket.close();
-}
+
 
 //初始化连接
-function SocketConnect(accept, error) {
+function SocketConnect(close, accept, error) {
     //创建websocket,并定义事件回调
     socket = new WebSocket(uri);
     //socket.onopen = function (e) {};
@@ -29,23 +22,5 @@ function doSend(message) {
     socket.send(message);
 }
 
-/*
-//打开连接回调
-function open() {
-    document.getElementById("message").innerText = "连接打开";
-}
-//接收数据回调
-function accept(result) {
-    document.getElementById("output").innerText=result;
-}*/
-//关闭连接回调
-function close() {
-    //document.getElementById("message").innerText="连接关闭";
-    SocketConnect(SocketReceive, error);
-}
 
-//错误回调
-function error(result) {
-    alert("错误："+result);
-}
 

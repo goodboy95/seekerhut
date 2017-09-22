@@ -36,7 +36,7 @@ namespace web
         {
             // Add framework services.
             services.AddMvc(options => {
-                //options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
             services.AddDbContext<DwDbContext>(options => options.UseMySql(Configuration.GetConnectionString("mysql")));
             //services.AddSession();
@@ -51,11 +51,11 @@ namespace web
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                //app.UseExceptionHandler("/Home/Error");
             }
             //app.UseSession();
             app.UseWebSockets();

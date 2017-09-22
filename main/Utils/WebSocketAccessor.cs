@@ -1,38 +1,43 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using model;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Utils
 {
-    public class WebSocketWithId
+    public class NoticeInfo
     {
-        public long id;
-        public WebSocket webSocket;
-        public WebSocketWithId(long id, WebSocket ws)
+        public int ForumNotice;
+        public int BlogNotice;
+        public int MsgNotice;
+        public NoticeInfo(int fn = 0, int bn = 0, int mn = 0)
         {
-            this.id = id;
-            webSocket = ws;
+            ForumNotice = fn;
+            BlogNotice = bn;
+            MsgNotice = mn;
         }
     }
     public class WebSocketAccessor
     {
         public HttpContext context;
         public WebSocket webSocket;
-        private static Dictionary<long, Stack<string>> msgDic; //所有等待通过websocket发送的消息
-        private static bool msgCanAccess; //msg被读写时加此锁(置为false)，防止访问（毕竟对于stack而言，读和写没啥差别）
+        private static object _lock;
+        private static Dictionary<long, string> msgDic; //所有等待通过websocket发送的消息
         static WebSocketAccessor()
         {
-            msgDic = new Dictionary<long, Stack<string>>();
-            msgCanAccess = true;
+            msgDic = new Dictionary<long, string>();
+            _lock = new object();
         }
-        public WebSocketAccessor()
+        public WebSocketAccessor(HttpContext context)
         {
+            this.context = context;
             webSocket = null;
         }
 
@@ -40,62 +45,53 @@ namespace Utils
         /// 启动WebSocket
         /// </summary>
         /// <param name="context"></param>
-        public bool SocketOpen(HttpContext context)
+        public void SocketOpen()
         {
-            this.context = context;
             //判断是否为websocket请求
             if (context.WebSockets.IsWebSocketRequest)
             {
-                //接收客户端
+                //ThreadPool.QueueUserWorkItem(new WaitCallback(MsgSend));
+                var acceptArr = new byte[10];
                 var webSocket = context.WebSockets.AcceptWebSocketAsync().Result;
                 long uid = Convert.ToInt64(context.Request.Cookies["id"]);
-                var namedWebSocket = new WebSocketWithId(uid, webSocket);
-                //启用线程发送接收客户端数据
-                //new Thread(Accept).Start(webSocket);
-                new Thread(MsgSend).Start(namedWebSocket);
-                while (webSocket?.State == WebSocketState.Open) 
+                Array.Clear(acceptArr, 0, acceptArr.Length);
+                while (webSocket?.State == WebSocketState.Open)
                 {
-                     Thread.Sleep(10000); 
+                    lock(_lock)
+                    {
+                        var msg = msgDic.ContainsKey(uid) ? msgDic[uid] : null;
+                        if (msg != null)
+                        {
+                            webSocket.SendAsync(new ArraySegment<byte>(System.Text.Encoding.UTF8.GetBytes(msg)),
+                                                WebSocketMessageType.Text, true, CancellationToken.None);
+                        }
+                        else
+                        {
+                            webSocket.SendAsync(new ArraySegment<byte>(System.Text.Encoding.UTF8.GetBytes("")),
+                                                WebSocketMessageType.Text, true, CancellationToken.None);
+                        }
+                    }
+                    webSocket.ReceiveAsync(new ArraySegment<byte>(acceptArr), CancellationToken.None);
+                    Thread.Sleep(10000);
+                    if (acceptArr.Where(i => i != 0).FirstOrDefault() == 0) { return; }
+                    Array.Clear(acceptArr, 0, acceptArr.Length);
                 }
-                return true;
             }
-            return false;
         }
 
-        public async Task<bool> WriteMsg(long receiverID, string msg)
-        {
-            await Task.Run((Action)ensureMsgWritable);          
-            msgCanAccess = false;
-            if (!msgDic.ContainsKey(receiverID)) { msgDic.Add(receiverID, new Stack<string>()); }
-            msgDic[receiverID].Push(msg);
-            msgCanAccess = true;
-            return true;
-        }
-
-        /// <summary>
-        /// 独立线程，通过websocket发送数据
-        /// </summary>
-        /// <param name="obj"></param>
-        void MsgSend(object obj)
-        {
-            var namedWebSocket = obj as WebSocketWithId;
-            var acceptArr = new byte[1024];
-            var uid = namedWebSocket.id;
-            var webSocket = namedWebSocket.webSocket;
-            while (webSocket?.State == WebSocketState.Open)
+        public bool WriteMsg(long receiverID, string msg)
+        {        
+            lock(_lock)
             {
-                if (!msgCanAccess) { Thread.Sleep(10); }
-                msgCanAccess = false;
-                var msgStack = msgDic.ContainsKey(uid) ? msgDic[uid] : null;
-                while (msgStack != null && msgStack.Count > 0)
+                if (!msgDic.ContainsKey(receiverID)) { msgDic.Add(receiverID, JsonConvert.SerializeObject(new NoticeInfo(bn: 1))); }
+                else
                 {
-                    var msg = msgStack.Pop();
-                    webSocket.SendAsync(new ArraySegment<byte>(System.Text.Encoding.UTF8.GetBytes(msg)),
-                                        WebSocketMessageType.Text, true, CancellationToken.None);
+                    var notice = JsonConvert.DeserializeObject<NoticeInfo>(msgDic[receiverID]);
+                    notice.BlogNotice += 1;
+                    msgDic[receiverID] = JsonConvert.SerializeObject(notice);
                 }
-                msgCanAccess = true;
-                Thread.Sleep(10000);
             }
+            return true;
         }
 
         /// <summary>
@@ -128,15 +124,9 @@ namespace Utils
                 var acceptStr = Encoding.UTF8.GetString(acceptArr).Trim(char.MinValue);
                 if (webSocket?.State == WebSocketState.Open) 
                 {
-                    
                      /*msgDic.Add(1, acceptStr); Console.WriteLine(acceptStr);*/ 
                 }
             }
-        }
-
-        void ensureMsgWritable()
-        {
-            while (!msgCanAccess) { Thread.Sleep(10); }
         }
     }
 }
