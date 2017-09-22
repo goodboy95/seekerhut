@@ -7,12 +7,12 @@ function SocketReceive(data) {
 
 //关闭连接回调
 function close() {
-    SocketConnect(SocketReceive, error);
+    SocketConnect(close, SocketReceive, error);
     console.log("oh,my...It's closed, reconnecting...");
 }
 
 //错误回调
-function error(result) {
-    SocketConnect(SocketReceive, error);
+function errorcb(result) {
+    SocketConnect(close, SocketReceive, error);
     console.log("连接异常关闭，开始重连...");
 }
