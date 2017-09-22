@@ -1,3 +1,4 @@
+var reconnects = 0;
 function SocketReceive(data) {
     socket.send("ok");
     if (data !== "") {
@@ -7,12 +8,21 @@ function SocketReceive(data) {
 
 //关闭连接回调
 function close() {
-    SocketConnect(close, SocketReceive, error);
-    console.log("oh,my...It's closed, reconnecting...");
+    if (reconnects < 5) {
+        SocketConnect(close, SocketReceive, error);
+        console.log("oh,my...It's closed, reconnecting...");
+        reconnects++;
+    }
+    
+    
+
 }
 
 //错误回调
-function errorcb(result) {
-    SocketConnect(close, SocketReceive, error);
-    console.log("连接异常关闭，开始重连...");
+function error(result) {
+    if (reconnects < 5) {
+        SocketConnect(close, SocketReceive, error);
+        console.log("oh,my...It's error, reconnecting...");
+        reconnects++;
+    }
 }
