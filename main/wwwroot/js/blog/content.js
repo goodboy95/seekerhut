@@ -1,4 +1,4 @@
-var authorID;
+var authorID, pageNum;
 
 window.onload = function(){
     SocketConnect(close, SocketReceive, error);
@@ -9,7 +9,24 @@ window.onload = function(){
     layui.use('layedit', function(){
         layedit = layui.layedit;
         contentBox = layedit.build('replyText');
-    })
+    });
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        flow.load({
+            elem: "#replyList",
+            done: function(page, next){
+                var data = GetReply(id, page, 10);
+                var replyList = data.replyList;
+                for (var i = 0; i < replyList.length; i++) {
+                    var author = replyList[i].authorID;
+                    var content = replyList[i].content;
+                    replyText += `<p>${author}说 : <br />${content}</p><br />`;
+                }
+                document.getElementById("replyList").innerHTML = replyText;
+                next("", page <= data.pageNum);
+            }
+        });
+    });
     $.get("/api/blog/blog/", {id: id}, function(resp){
         if (resp.code == 0){
             var blog = resp.data.blog;
@@ -20,22 +37,6 @@ window.onload = function(){
             document.getElementById("content").innerHTML = blog.content;
         }
         else{
-            alert(resp.msg);
-        }
-    });
-    //TODO: 回复列表要改为点击按钮后再加载
-    $.get("/api/blog/replylist/", {blogID: id}, function(resp){
-        if (resp.code === 0) {
-            var replyText = "", 
-                replyList = resp.data.replyList;
-            for (var i = 0; i < replyList.length; i++) {
-                var author = replyList[i].authorID;
-                var content = replyList[i].content;
-                replyText += `<p>${author}说 : <br />${content}</p><br />`;
-            }
-            document.getElementById("replyList").innerHTML = replyText;
-        }
-        else {
             alert(resp.msg);
         }
     });
@@ -56,4 +57,17 @@ window.onload = function(){
             }
         });
     };
+}
+
+function GetReply(blogID, pageNo, pageSize) {
+    var replydata;
+    $.get("/api/blog/replylist/", {blogID: blogID, pageNo: pageNo, pageSize: pageSize}, function(resp){
+        if (resp.code === 0) {
+            replydata = resp.data;
+        }
+        else {
+            replydata = null;
+        }
+    });
+    return replydata;
 }

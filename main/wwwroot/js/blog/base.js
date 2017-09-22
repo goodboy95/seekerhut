@@ -1,5 +1,6 @@
 var reconnects = 0;
 function SocketReceive(data) {
+    reconnects = 0;
     socket.send("ok");
     if (data !== "") {
         document.getElementById("notice").innerHTML = JSON.parse(data).BlogNotice;

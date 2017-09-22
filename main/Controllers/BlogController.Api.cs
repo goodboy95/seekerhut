@@ -111,10 +111,23 @@ namespace web.Api.Controllers
             return JsonReturn.ReturnSuccess(new {blogList = blogList});
         }
         [HttpGet("replyList")]
-        public JsonReturn GetReply([FromQuery]long blogID)
+        public JsonReturn GetReply([FromQuery]long blogID, [FromQuery]int pageNo, [FromQuery]int pageSize)
         {
+            if (pageNo <= 0) { pageNo = 1; }
+            if (pageSize <= 2) { pageSize = 5; }
+            var skipRows = (pageNo - 1) * pageSize;
             var replyList = from r in dbc.BlogReply where r.BlogID == blogID select r;
-            return JsonReturn.ReturnSuccess(new {replyList = replyList});
+            var replyNum = replyList.Count();
+            var pageNum = replyNum / pageSize + (replyNum % pageSize > 0 ? 1 : 0);
+            if (replyNum > skipRows || pageNo == 1)
+            {
+                replyList = replyList.Skip(skipRows).Take(pageSize);
+                return JsonReturn.ReturnSuccess(new {replyList = replyList, pageNum = pageNum});
+            }
+            else
+            {
+                return JsonReturn.ReturnFail("页码超出范围！");
+            }
         }
         [HttpPost("reply")]
         public JsonReturn SaveReply([FromForm]long authorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long reReplyID)
