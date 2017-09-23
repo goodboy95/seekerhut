@@ -118,11 +118,10 @@ namespace web.Api.Controllers
             var skipRows = (pageNo - 1) * pageSize;
             var replyList = from r in dbc.BlogReply where r.BlogID == blogID select r;
             var replyNum = replyList.Count();
-            var pageNum = replyNum / pageSize + (replyNum % pageSize > 0 ? 1 : 0);
             if (replyNum > skipRows || pageNo == 1)
             {
                 replyList = replyList.Skip(skipRows).Take(pageSize);
-                return JsonReturn.ReturnSuccess(new {replyList = replyList, pageNum = pageNum});
+                return JsonReturn.ReturnSuccess(new {replyList = replyList, replyNum = replyNum});
             }
             else
             {
