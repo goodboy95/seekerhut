@@ -1,5 +1,5 @@
 var socket = null;
-var uri = "ws://localhost:8080/";
+var uri = "ws://www.seekerhut.com/";
 
 //发送方法
 function SocketSend()
