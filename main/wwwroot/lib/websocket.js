@@ -1,5 +1,4 @@
 var socket = null;
-var uri = "ws://www.seekerhut.com/";
 
 //发送方法
 function SocketSend()
@@ -10,6 +9,10 @@ function SocketSend()
 
 //初始化连接
 function SocketConnect(close, accept, error) {
+    var host = window.location.host;
+    if (!host.includes("localhost")) { host = "www." + host; }
+    var uri = "ws://" + host;
+    console.log(uri);
     //创建websocket,并定义事件回调
     socket = new WebSocket(uri);
     //socket.onopen = function (e) {};

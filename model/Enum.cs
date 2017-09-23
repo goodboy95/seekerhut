@@ -4,10 +4,10 @@ namespace model
 {
     public enum MessageType : int
     {
-        blogReply = 0,
-        forumReply = 1,
-        privateMsg = 2,
-        systemMsg = 3
+        BlogReply = 0,
+        ForumReply = 1,
+        PrivateMsg = 2,
+        SystemMsg = 3
     }
 
     //enum扩展类，提供ToInt功能

@@ -1,4 +1,4 @@
-var authorID, pageNum;
+var authorID, replies = "";
 
 window.onload = function(){
     SocketConnect(close, SocketReceive, error);
@@ -15,15 +15,21 @@ window.onload = function(){
         flow.load({
             elem: "#replyList",
             done: function(page, next){
-                var data = GetReply(id, page, 10);
-                var replyList = data.replyList;
-                for (var i = 0; i < replyList.length; i++) {
-                    var author = replyList[i].authorID;
-                    var content = replyList[i].content;
-                    replyText += `<p>${author}说 : <br />${content}</p><br />`;
-                }
-                document.getElementById("replyList").innerHTML = replyText;
-                next("", page <= data.pageNum);
+                var replyData;
+                $.get("/api/blog/replylist/", {blogID: id, pageNo: page, pageSize: 5}, function(resp){
+                    if (parseInt(resp.code) === 0) { 
+                        replyData = resp.data;
+                        var replyList = replyData.replyList;
+                        for (var i = 0; i < replyList.length; i++) {
+                            var author = replyList[i].authorID;
+                            var content = replyList[i].content;
+                            replies += `<p>${author}说 : <br />${content}</p><br />`;
+                        }
+                        document.getElementById("replyList").innerHTML = replies;
+                        next("", page < replyData.pageNum);
+                    }
+                    else { return; }
+                });
             }
         });
     });
@@ -50,24 +56,11 @@ window.onload = function(){
         }, function(resp){
             if (resp.code === 0){
                 alert("回复成功！");
-                location.reload();
+                //location.reload();
             }
             else{
                 alert(resp.msg);
             }
         });
     };
-}
-
-function GetReply(blogID, pageNo, pageSize) {
-    var replydata;
-    $.get("/api/blog/replylist/", {blogID: blogID, pageNo: pageNo, pageSize: pageSize}, function(resp){
-        if (resp.code === 0) {
-            replydata = resp.data;
-        }
-        else {
-            replydata = null;
-        }
-    });
-    return replydata;
 }

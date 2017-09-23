@@ -3,7 +3,8 @@ function SocketReceive(data) {
     reconnects = 0;
     socket.send("ok");
     if (data !== "") {
-        document.getElementById("notice").innerHTML = JSON.parse(data).BlogNotice;
+        var jdata = JSON.parse(data);
+        document.getElementById("notice").innerHTML = jdata["BlogReply"] > 0 ? jdata["BlogReply"] : 0;
     }
 }
 
@@ -14,9 +15,6 @@ function close() {
         console.log("oh,my...It's closed, reconnecting...");
         reconnects++;
     }
-    
-    
-
 }
 
 //错误回调

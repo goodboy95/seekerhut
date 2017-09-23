@@ -136,8 +136,7 @@ namespace web.Api.Controllers
             var bre = new BlogReplyEntity(){BlogID = blogID, AuthorID = userID, Content = content, LikeID = new HashSet<long>(), ReReplyID = reReplyID};
             dbc.BlogReply.Add(bre);
             dbc.SaveChanges();
-            //var notifyMsg = new { msgType = MessageType.blogReply.ToInt(), sender = userID }.ToString();
-            wsa.WriteMsg(authorID, "blogNotice");
+            wsa.WriteMsg(authorID, MessageType.BlogReply);
             return JsonReturn.ReturnSuccess();
         }
     }

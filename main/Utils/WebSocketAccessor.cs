@@ -12,18 +12,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Utils
 {
-    public class NoticeInfo
-    {
-        public int ForumNotice;
-        public int BlogNotice;
-        public int MsgNotice;
-        public NoticeInfo(int fn = 0, int bn = 0, int mn = 0)
-        {
-            ForumNotice = fn;
-            BlogNotice = bn;
-            MsgNotice = mn;
-        }
-    }
     public class WebSocketAccessor
     {
         public HttpContext context;
@@ -50,7 +38,6 @@ namespace Utils
             //判断是否为websocket请求
             if (context.WebSockets.IsWebSocketRequest)
             {
-                //ThreadPool.QueueUserWorkItem(new WaitCallback(MsgSend));
                 var acceptArr = new byte[10];
                 var webSocket = context.WebSockets.AcceptWebSocketAsync().Result;
                 long uid = Convert.ToInt64(context.Request.Cookies["id"]);
@@ -79,16 +66,44 @@ namespace Utils
             }
         }
 
-        public bool WriteMsg(long receiverID, string msg)
-        {        
+        /// <summary>
+        /// 写入新消息提示
+        /// </summary>
+        /// <param name="receiverID">收信人id</param>
+        /// <param name="msgType">提示种类（如博客回复：blogreply，论坛回复：forumreply，私信：privatemsg等）</param>
+        /// <returns></returns>
+        public bool WriteMsg(long receiverID, MessageType msgType)
+        {       
+            string msgTypeStr = msgType.ToString();
+            Dictionary<string, int> inf;
             lock(_lock)
             {
-                if (!msgDic.ContainsKey(receiverID)) { msgDic.Add(receiverID, JsonConvert.SerializeObject(new NoticeInfo(bn: 1))); }
-                else
+                if (!msgDic.ContainsKey(receiverID)) 
                 {
-                    var notice = JsonConvert.DeserializeObject<NoticeInfo>(msgDic[receiverID]);
-                    notice.BlogNotice += 1;
-                    msgDic[receiverID] = JsonConvert.SerializeObject(notice);
+                    inf = new Dictionary<string, int>();
+                    msgDic.Add(receiverID, "");
+                }
+                else { inf = JsonConvert.DeserializeObject<Dictionary<string, int>>(msgDic[receiverID]); }
+                if (inf.ContainsKey(msgTypeStr)) { inf[msgTypeStr]++; }
+                else { inf.Add(msgTypeStr, 1); }
+                msgDic[receiverID] = JsonConvert.SerializeObject(inf);
+            }
+            return true;
+        }
+
+        public bool ClearMsg(long receiverID, MessageType msgType)
+        {
+            string msgTypeStr = msgType.ToString();
+            lock(_lock)
+            {
+                if (msgDic.ContainsKey(receiverID))
+                {
+                    var inf = JsonConvert.DeserializeObject<Dictionary<string, int>>(msgDic[receiverID]);
+                    if (inf.ContainsKey(msgTypeStr)) 
+                    { 
+                        inf[msgTypeStr] = 0;
+                        msgDic[receiverID] = JsonConvert.SerializeObject(inf);
+                    }
                 }
             }
             return true;
