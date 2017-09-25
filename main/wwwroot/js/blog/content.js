@@ -21,7 +21,7 @@ window.onload = function(){
                         var replyList = resp.data.replyList;
                         replyNum = resp.data.replyNum;
                         for (var i = 0; i < replyList.length; i++) {
-                            var author = replyList[i].authorID;
+                            var author = replyList[i].user;
                             var content = replyList[i].content;
                             replies += `<p>${author}说 : <br />${content}</p><br />`;
                         }

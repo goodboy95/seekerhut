@@ -13,18 +13,18 @@ namespace Domain.Mapping
             var entity = modelBuilder.Entity<BlogReplyEntity>();
 
             entity.ToTable("blog_reply");
-            entity.HasKey(p => p.ID);
-            entity.Property(p => p.ID).HasColumnName("id").UseMySqlIdentityColumn();
-            entity.Property(p => p.CreateTime).HasColumnName("datetime");
-            entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+            entity.HasKey(p => p.BlogReplyID);
+            entity.Property(p => p.BlogReplyID).HasColumnName("blog_reply_id").UseMySqlIdentityColumn();
+            entity.Property(p => p.BlogReplyCreateTime).HasColumnName("blog_reply_create_time");
+            entity.Property(p => p.BlogReplyIsDeleted).HasColumnName("blog_reply_is_deleted");
             entity.Property(p => p.BlogID).HasColumnName("blog_id");
-            entity.Property(p => p.AuthorID).HasColumnName("author_id").IsRequired();
-            entity.Property(p => p.Content).HasColumnName("content").IsRequired();
-            entity.Property(p => p.ReReplyID).HasColumnName("re_reply_id").IsRequired();
-            entity.Property(p => p._likeID).HasColumnName("like_id").IsRequired();
+            entity.Property(p => p.BlogReplyAuthorID).HasColumnName("blog_reply_author_id").IsRequired();
+            entity.Property(p => p.BlogReplyContent).HasColumnName("blog_reply_content").IsRequired();
+            entity.Property(p => p.BlogReplyFatherID).HasColumnName("blog_reply_father_id").IsRequired();
+            entity.Property(p => p._blogReplyLikeID).HasColumnName("blog_reply_like_id").IsRequired();
             entity.HasIndex(p => p.BlogID);
-            entity.HasIndex(p => p.AuthorID);
-            entity.Ignore(p => p.LikeID);
+            entity.HasIndex(p => p.BlogReplyAuthorID);
+            entity.Ignore(p => p.BlogReplyLikeID);
         }
     }
 }
