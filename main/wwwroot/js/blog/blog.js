@@ -10,7 +10,7 @@ function getBlogList(pageNo, pageSize){
             var blogList = resp.data.blogList,
                 blogListHTML = "";
             for(var i=0; i<blogList.length; i++){
-                blogListHTML += `<a href=../content?id=${blogList[i].id}>${blogList[i].title}</a><br />`;
+                blogListHTML += `<a href=../content?id=${blogList[i].blogID}>${blogList[i].blogTitle}</a><br />`;
             }
             if (resp.data.blogNum != blogNum){
                 blogNum = resp.data.blogNum;

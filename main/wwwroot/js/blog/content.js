@@ -19,9 +19,8 @@ window.onload = function(){
                 $.get("/api/blog/replylist/", {blogID: id, pageNo: page, pageSize: 5}, function(resp){
                     if (parseInt(resp.code) === 0) { 
                         var replyList = resp.data.replyList;
-                        replyNum = resp.data.replyNum;
                         for (var i = 0; i < replyList.length; i++) {
-                            var author = replyList[i].user;
+                            var author = replyList[i].author;
                             var content = replyList[i].content;
                             replies += `<p>${author}说 : <br />${content}</p><br />`;
                         }
@@ -38,10 +37,10 @@ window.onload = function(){
         if (resp.code == 0){
             var blog = resp.data.blog;
             authorID = blog.authorID;
-            document.getElementById("title").innerHTML = blog.title;
+            document.getElementById("title").innerHTML = blog.blogTitle;
             document.getElementById("author").innerHTML = resp.data.authorName;
             document.getElementById("createTime").innerHTML = resp.data.createTime;
-            document.getElementById("content").innerHTML = blog.content;
+            document.getElementById("content").innerHTML = blog.blogContent;
         }
         else{
             alert(resp.msg);

@@ -18,16 +18,24 @@ namespace web.Api.Controllers
         {
             //redis = StackRedisHelper.Instance;
         }
+
+        private string dateTimeFormatter(DateTime dt)
+        {
+            if (dt.Date < DateTime.Today.Date) { return dt.ToString("yyyy-MM-dd"); }
+            else { return dt.ToString("HH:mm"); }
+        }
+
         [HttpGet("blogList")]
         public JsonReturn GetBlogList([FromQuery]long authorID, [FromQuery]int pageNo, [FromQuery]int pageSize)
         {
             var skipRows = (pageNo - 1) * pageSize;
-            var blogList = from blog in dbc.Blog where blog.BlogAuthorID == authorID select new {blog.BlogTitle, blog.BlogID, blog.BlogCreateTime};
+            var blogList = from blog in dbc.Blog where blog.BlogAuthorID == authorID 
+            orderby blog.BlogID select new {blog.BlogTitle, blog.BlogID, blog.BlogCreateTime};
             var blogNum = blogList.Count();
             if (blogNum > skipRows || pageNo == 1) 
             {
                 blogList = blogList.Skip(skipRows).Take(pageSize);
-            return JsonReturn.ReturnSuccess(new { blogNum = blogNum, blogList = blogList });
+                return JsonReturn.ReturnSuccess(new { blogNum = blogNum, blogList = blogList });
             }
             else
             {
@@ -40,8 +48,7 @@ namespace web.Api.Controllers
         {
             var blog = dbc.Blog.Find(Convert.ToInt64(id));
             var authorID = blog.BlogAuthorID;
-            var ct = blog.BlogCreateTime;
-            string createTimeStr = $"{ct.Year}年{ct.Month}月{ct.Day}日  {ct.Hour}时{ct.Minute}分";
+            string createTimeStr = dateTimeFormatter(blog.BlogCreateTime);
             var authorName = (from u in dbc.User where u.UserID == authorID select u.Name).FirstOrDefault();
             if (authorName == null) { authorName = "幽灵用户"; }
             if (blog == null) { return JsonReturn.ReturnFail("该日志不存在！"); }
@@ -116,8 +123,8 @@ namespace web.Api.Controllers
             if (pageNo <= 0) { pageNo = 1; }
             if (pageSize <= 2) { pageSize = 5; }
             var skipRows = (pageNo - 1) * pageSize;
-            var replyList = from r in dbc.BlogReply where r.BlogID == blogID
-                            join u in dbc.User on r.BlogReplyAuthorID equals u.UserID select r;
+            var replyList = from r in dbc.BlogReply where r.BlogID == blogID join u in dbc.User on r.BlogReplyAuthorID equals u.UserID orderby r.BlogReplyID
+                            select new {author = u.Name, content = r.BlogReplyContent, sendtime = dateTimeFormatter(r.BlogReplyCreateTime)};
             var replyNum = replyList.Count();
             if (replyNum > skipRows || pageNo == 1)
             {

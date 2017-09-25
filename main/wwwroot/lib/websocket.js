@@ -12,7 +12,6 @@ function SocketConnect(close, accept, error) {
     var host = window.location.host;
     if (!host.includes("localhost")) { host = "www." + host; }
     var uri = "ws://" + host;
-    console.log(uri);
     //创建websocket,并定义事件回调
     socket = new WebSocket(uri);
     //socket.onopen = function (e) {};
@@ -23,6 +22,24 @@ function SocketConnect(close, accept, error) {
 //发送信息
 function doSend(message) {
     socket.send(message);
+}
+
+//关闭连接回调
+function close() {
+    if (reconnects < 5) {
+        SocketConnect(close, SocketReceive, error);
+        console.log("oh,my...It's closed, reconnecting...");
+        reconnects++;
+    }
+}
+
+//错误回调
+function error(result) {
+    if (reconnects < 5) {
+        SocketConnect(close, SocketReceive, error);
+        console.log("oh,my...It's error, reconnecting...");
+        reconnects++;
+    }
 }
 
 
