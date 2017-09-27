@@ -44,7 +44,12 @@ namespace web.Controllers
             string realToken = curUser?.Token;
             var tokenTime = curUser?.ExpireTime;
             if (wsa == null) { wsa = new WebSocketAccessor(context.HttpContext); }
-            if (wsa.webSocket?.State != WebSocketState.Open) { wsa.SocketOpen(); }
+            if (wsa.webSocket?.State != WebSocketState.Open) 
+            {
+                var thread = new Thread(wsa.SocketOpen);
+                thread.Start();
+                thread.Join();
+            }
             if (curUser == null || token == null || realToken == null || token != realToken || tokenTime < DateTime.Now)
             {
                 LoginFail(context);

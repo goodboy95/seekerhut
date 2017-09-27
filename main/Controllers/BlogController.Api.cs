@@ -137,13 +137,13 @@ namespace web.Api.Controllers
             }
         }
         [HttpPost("reply")]
-        public JsonReturn SaveReply([FromForm]long authorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long fatherID)
+        public JsonReturn SaveReply([FromForm]long blogAuthorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long fatherID)
         {
             var userID = Convert.ToInt64(Request.Cookies["id"]);
             var bre = new BlogReplyEntity(){BlogID = blogID, BlogReplyAuthorID = userID, BlogReplyContent = content, BlogReplyLikeID = new HashSet<long>(), BlogReplyFatherID = fatherID};
             dbc.BlogReply.Add(bre);
             dbc.SaveChanges();
-            wsa.WriteMsg(authorID, MessageType.BlogReply);
+            wsa.WriteMsg(blogAuthorID, MessageType.BlogReply);
             return JsonReturn.ReturnSuccess();
         }
     }

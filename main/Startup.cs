@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
-//using NLog.Extensions.Logging;
+using NLog.Extensions.Logging;
 using Dao;
 using Middleware;
 using Utils;
@@ -46,8 +46,8 @@ namespace web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DwDbContext c)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            //loggerFactory.AddNLog().AddDebug();
+            //loggerFactory.AddDebug();
+            loggerFactory.AddNLog().AddDebug();
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();

@@ -36,7 +36,7 @@ window.onload = function(){
     $.get("/api/blog/blog/", {id: id}, function(resp){
         if (resp.code == 0){
             var blog = resp.data.blog;
-            authorID = blog.authorID;
+            authorID = blog.blogAuthorID;
             document.getElementById("title").innerHTML = blog.blogTitle;
             document.getElementById("author").innerHTML = resp.data.authorName;
             document.getElementById("createTime").innerHTML = resp.data.createTime;
@@ -51,7 +51,7 @@ window.onload = function(){
         var replyContent = layedit.getContent(contentBox);
         var userName = Cookies.get("username");
         $.post("/api/blog/reply/", {
-            authorID: authorID,
+            blogAuthorID: authorID,
             blogID: id,
             content: replyContent,
             __RequestVerificationToken: $("#token").find("input").val()
