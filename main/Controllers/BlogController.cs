@@ -29,7 +29,7 @@ namespace web.Controllers
                 var blogListHtml = "";
                 foreach (var blogLink in blogListInfo["BlogList"])
                 {
-                    blogListHtml += $"<a href=../blogcontent/{blogLink["BlogID"]}>{blogLink["BlogTitle"]}</a><br />\n\t";
+                    blogListHtml += $"<a href=../content/{blogLink["BlogID"]}>{blogLink["BlogTitle"]}</a><br />\n\t";
                 }
                 ViewBag.BlogNum = blogListInfo["BlogNum"].ToString();
                 ViewBag.PageNum = id;
@@ -39,8 +39,8 @@ namespace web.Controllers
         }
         [Route("writeblog")]
         public IActionResult WriteBlog() => View();
-        [Route("blogcontent/{id}")]
-        public IActionResult BlogContent(string id)
+        [Route("content/{id}")]
+        public IActionResult Content(string id)
         {            
             var isIdNum = long.TryParse(id, out long blogId);
             var blogReturn = _blogApi.GetBlog(blogId);
@@ -48,7 +48,8 @@ namespace web.Controllers
             else
             {
                 var blogInfo = (JObject)blogReturn.Data;
-                ViewBag.BlogId = id;
+                ViewBag.BlogID = id;
+                ViewBag.AuthorID = blogInfo["BlogAuthorID"].ToString();
                 ViewBag.BlogTitle = blogInfo["BlogTitle"].ToString();
                 ViewBag.BlogAuthor = blogInfo["AuthorName"].ToString();
                 ViewBag.BlogContent = blogInfo["BlogContent"].ToString();

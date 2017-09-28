@@ -2,8 +2,8 @@ window.onload = function(){
     SocketConnect(close, SocketReceive, error);
     document.getElementById("menu-myblog").classList.add("layui-this");
 
-    var layedit, contentBox, authorID, replyNum,
-        id = document.getElementById("blogId").innerHTML,
+    var layedit, contentBox, replyNum,
+        id = document.getElementById("blogID").innerHTML,
         finalPage = false, replies = "";
 
     layui.use('layedit', function(){
@@ -36,6 +36,7 @@ window.onload = function(){
     document.getElementById("replySubmit").onclick = function(){
         var replyContent = layedit.getContent(contentBox);
         var userName = Cookies.get("username");
+        var authorID = document.getElementById("authorID").innerHTML;
         $.post("/blogapi/reply/", {
             blogAuthorID: authorID,
             blogID: id,
