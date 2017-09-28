@@ -39,27 +39,27 @@ namespace web
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
             services.AddDbContext<DwDbContext>(options => options.UseMySql(Configuration.GetConnectionString("mysql")));
-            //services.AddSession();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DwDbContext c)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
+            loggerFactory.AddDebug();
             loggerFactory.AddNLog().AddDebug();
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
-                //app.UseBrowserLink();
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
             else
             {
-                //app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Error");
             }
-            //app.UseSession();
+            app.UseSession();
             app.UseWebSockets();
-            //IConfigurationSection redisConf = Configuration.GetSection("Redis");
+            IConfigurationSection redisConf = Configuration.GetSection("Redis");
             //StackRedisHelper.InitRedis(redisConf.GetValue<string>("ConnStr"), redisConf.GetValue<Int32>("Database"), redisConf.GetValue<string>("Name"));
             //如/file对应的文件夹不存在，自动创建文件夹
             if (!Directory.Exists(Configuration.GetSection("VirtualPath").GetValue<string>("File")))

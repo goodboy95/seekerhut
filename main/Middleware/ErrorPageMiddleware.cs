@@ -37,8 +37,8 @@ namespace Middleware
                 if (!context.Response.HasStarted)
                 {
                     var statusCode = context.Response.StatusCode;
-                    var requestController = context.Request.Path.ToString().Split('/')[1].ToLower();
-                    if (requestController == "api")
+                    var requestPath = context.Request.Path.ToString();
+                    if (requestPath.Contains("api/"))
                     {
                         switch(statusCode)
                         {

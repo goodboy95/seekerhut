@@ -3,8 +3,7 @@ window.onload = function(){
     document.getElementById("menu-myblog").classList.add("layui-this");
 
     var layedit, contentBox, authorID, replyNum,
-        queryStr = window.location.href.split("?")[1], 
-        id = queryStr.split("=")[1],
+        id = document.getElementById("blogId").innerHTML,
         finalPage = false, replies = "";
 
     layui.use('layedit', function(){
@@ -16,7 +15,7 @@ window.onload = function(){
         flow.load({
             elem: "#replyList",
             done: function(page, next){
-                $.get("/api/blog/replylist/", {blogID: id, pageNo: page, pageSize: 5}, function(resp){
+                $.get("/blogapi/replylist/", {blogID: id, pageNo: page, pageSize: 5}, function(resp){
                     if (parseInt(resp.code) === 0) { 
                         var replyList = resp.data.replyList;
                         for (var i = 0; i < replyList.length; i++) {
@@ -33,24 +32,11 @@ window.onload = function(){
             }
         });
     });
-    $.get("/api/blog/blog/", {id: id}, function(resp){
-        if (resp.code == 0){
-            var blog = resp.data.blog;
-            authorID = blog.blogAuthorID;
-            document.getElementById("title").innerHTML = blog.blogTitle;
-            document.getElementById("author").innerHTML = resp.data.authorName;
-            document.getElementById("createTime").innerHTML = resp.data.createTime;
-            document.getElementById("content").innerHTML = blog.blogContent;
-        }
-        else{
-            alert(resp.msg);
-        }
-    });
 
     document.getElementById("replySubmit").onclick = function(){
         var replyContent = layedit.getContent(contentBox);
         var userName = Cookies.get("username");
-        $.post("/api/blog/reply/", {
+        $.post("/blogapi/reply/", {
             blogAuthorID: authorID,
             blogID: id,
             content: replyContent,

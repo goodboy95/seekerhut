@@ -7,14 +7,16 @@ using Microsoft.Extensions.Logging;
 using Dao;
 using System.Collections.Generic;
 using model;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace web.Api.Controllers
 {
-    [Route("api/[controller]")]
-    public class BlogController : ApiBaseController
+    [Route("[controller]")]
+    public class BlogApiController : ApiBaseController
     {
         //StackRedisHelper redis;
-        public BlogController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public BlogApiController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
         {
             //redis = StackRedisHelper.Instance;
         }
@@ -35,7 +37,9 @@ namespace web.Api.Controllers
             if (blogNum > skipRows || pageNo == 1) 
             {
                 blogList = blogList.Skip(skipRows).Take(pageSize);
-                return JsonReturn.ReturnSuccess(new { blogNum = blogNum, blogList = blogList });
+                var blogListStr = JsonConvert.SerializeObject(blogList);
+                var blogListInfo = new JObject(){["BlogNum"] = blogNum, ["BlogList"] = JArray.Parse(blogListStr)};
+                return JsonReturn.ReturnSuccess(blogListInfo);
             }
             else
             {
@@ -44,13 +48,9 @@ namespace web.Api.Controllers
             
         }
         [HttpGet("blog")]
-        public JsonReturn GetBlog([FromQuery]int id)
+        public JsonReturn GetBlog([FromQuery]long id)
         {
-            var blog = dbc.Blog.Find(Convert.ToInt64(id));
-            var authorID = blog.BlogAuthorID;
-            string createTimeStr = dateTimeFormatter(blog.BlogCreateTime);
-            var authorName = (from u in dbc.User where u.UserID == authorID select u.Name).FirstOrDefault();
-            if (authorName == null) { authorName = "幽灵用户"; }
+            var blog = dbc.Blog.Find(id);
             if (blog == null) { return JsonReturn.ReturnFail("该日志不存在！"); }
             if ((blog.BlogPrivacy & 0b10) != 0 && Convert.ToInt64(Request.Cookies["id"]) != blog.BlogAuthorID) 
                 return JsonReturn.ReturnFail("你无权访问该日志！");
@@ -61,7 +61,12 @@ namespace web.Api.Controllers
                 if (visibleIds.IndexOf(userid) == -1)
                     return JsonReturn.ReturnFail("你无权访问该日志！");
             }
-            return JsonReturn.ReturnSuccess(new {blog = blog, authorName = authorName, createTime = createTimeStr});
+            var blogInfo = JObject.Parse(JsonConvert.SerializeObject(blog));
+            var authorID = blog.BlogAuthorID;
+            blogInfo["CreateTimeStr"] = dateTimeFormatter(blog.BlogCreateTime);
+            blogInfo["AuthorName"] = (from u in dbc.User where u.UserID == authorID select u.Name).FirstOrDefault();
+            if (blogInfo["AuthorName"] == null) { blogInfo["AuthorName"] = "幽灵用户"; }
+            return JsonReturn.ReturnSuccess(blogInfo);
         }
         
         [HttpPost("blog")]

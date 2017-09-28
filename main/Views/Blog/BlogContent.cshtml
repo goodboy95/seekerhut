@@ -7,15 +7,16 @@
 <title>探索日志</title>
 
 <div>
-    <h1 id="title"></h1>
+    <p id="blogId" hidden>@ViewBag.BlogId</p>
+    <h1 id="title">@ViewBag.BlogTitle</h1>
     <div id="authorData">
-        <span>作者：</span><span id="author"></span>
+        <span>作者：</span><span id="author">@ViewBag.BlogAuthor</span>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <span>发布时间：</span><span id="createTime"></span>
+        <span>发布时间：</span><span id="createTime">@ViewBag.CreateTime</span>
     </div>
     <br />
     <div>
-        <div id="content" contenteditable="false" style=""></div>
+        <div id="content" contenteditable="false" style="">@Html.Raw(ViewBag.BlogContent)</div>
     </div>
 </div>
 <div>
