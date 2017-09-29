@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace web.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class HomeApiController : ApiBaseController
     {
         public HomeApiController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
@@ -33,7 +33,7 @@ namespace web.Api.Controllers
             }
             return passHash;
         }
-        [HttpPut("register")]
+        [HttpPost("register")]
         public JsonReturn Register(string username, string password)
         {
             username = HTMLEntity.XSSConvert(username);

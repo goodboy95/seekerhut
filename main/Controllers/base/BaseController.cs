@@ -18,11 +18,14 @@ namespace web.Controllers
     {
         protected WebSocketAccessor wsa = null;
         protected readonly DwDbContext dbc;
-        private ILogger _log;
+        protected ILogger _log;
+        protected long userID;
+        //protected StackRedisHelper redis;
         public BaseController(DwDbContext dbc, ILoggerFactory logFac)
         {
             this.dbc = dbc;
             _log = logFac.CreateLogger("seekerhut");
+            //redis = StackRedisHelper.Instance;
         }
 
 
@@ -38,7 +41,7 @@ namespace web.Controllers
         protected virtual void LoginFail(ActionExecutingContext context) {}
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            long userID = Convert.ToInt64(Request.Cookies["id"]);
+            userID = Request?.Cookies["id"] != null ? Convert.ToInt64(Request.Cookies["id"]) : 0;
             string token = Request.Cookies["token"];
             var curUser = (from u in dbc.User where u.UserID == userID select new {u.Token, u.ExpireTime}).FirstOrDefault();
             string realToken = curUser?.Token;
@@ -60,8 +63,7 @@ namespace web.Controllers
         }
         public int GetAdminLevel()
         {
-            string username = Request.Cookies["username"];
-            int adminLevel = (from user in dbc.User where user.Name == username select user.Admin).FirstOrDefault();
+            int adminLevel = (from user in dbc.User where user.UserID == userID select user.Admin).FirstOrDefault();
             return adminLevel;
         }
     }

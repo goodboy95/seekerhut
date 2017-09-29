@@ -14,12 +14,8 @@ namespace web.Api.Controllers
 {
     [Route("[controller]")]
     public class BlogApiController : ApiBaseController
-    {
-        //StackRedisHelper redis;
-        public BlogApiController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
-        {
-            //redis = StackRedisHelper.Instance;
-        }
+    {       
+        public BlogApiController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac){}
 
         private string dateTimeFormatter(DateTime dt)
         {
@@ -54,13 +50,12 @@ namespace web.Api.Controllers
         {
             var blog = dbc.Blog.Find(id);
             if (blog == null) { return JsonReturn.ReturnFail("该日志不存在！"); }
-            if ((blog.BlogPrivacy & 0b10) != 0 && Convert.ToInt64(Request.Cookies["id"]) != blog.BlogAuthorID) 
+            if ((blog.BlogPrivacy & 0b10) != 0 && userID != blog.BlogAuthorID) 
                 return JsonReturn.ReturnFail("你无权访问该日志！");
             else if ((blog.BlogPrivacy & 0b01) != 0)
             {
-                var userid = Convert.ToInt64(Request.Cookies["id"]);
                 var visibleIds = blog.BlogVisibleUserID;
-                if (visibleIds.IndexOf(userid) == -1)
+                if (visibleIds.IndexOf(userID) == -1)
                     return JsonReturn.ReturnFail("你无权访问该日志！");
             }
             var blogInfo = JObject.Parse(JsonConvert.SerializeObject(blog));
@@ -79,9 +74,8 @@ namespace web.Api.Controllers
                 return JsonReturn.ReturnFail("你有未输入的部分，无法提交！");
             }
             title = HTMLEntity.XSSConvert(title);
-            long authorID = Convert.ToInt64(Request.Cookies["id"]);
             var tagSet = new HashSet<string>();
-            BlogEntity blog = new BlogEntity { BlogTitle = title, BlogAuthorID = authorID, BlogPrivacy = privacy, BlogVisibleUserID = new List<long>(), BlogTags = new HashSet<string>(), 
+            BlogEntity blog = new BlogEntity { BlogTitle = title, BlogAuthorID = userID, BlogPrivacy = privacy, BlogVisibleUserID = new List<long>(), BlogTags = new HashSet<string>(), 
                                                 BlogLikeNum = 0, BlogContent = content, BlogAttachments = new List<FileMetaEntity>(), BlogLikeID = new HashSet<long>(),
                                                 BlogDislikeID = new HashSet<long>(), BlogAwardGoldInfo = new Dictionary<long, int>() };
             dbc.Blog.Add(blog);
@@ -89,10 +83,10 @@ namespace web.Api.Controllers
             foreach(var i in tags)
             {
                 tagSet.Add(i);
-                var tagUser = (from tr in dbc.BlogTagRelation where tr.BtrUserID == authorID && tr.BtrTagName == i select tr).FirstOrDefault();
+                var tagUser = (from tr in dbc.BlogTagRelation where tr.BtrUserID == userID && tr.BtrTagName == i select tr).FirstOrDefault();
                 if (tagUser == null)
                 {
-                    tagUser = new BlogTagRelationEntity{BtrTagName = i, BtrUserID = authorID, BlogIDList = new List<long>()};
+                    tagUser = new BlogTagRelationEntity{BtrTagName = i, BtrUserID = userID, BlogIDList = new List<long>()};
                 }
                 var tmpBlogIDList = tagUser.BlogIDList;
                 tmpBlogIDList.Add(blog.BlogID);
@@ -153,12 +147,17 @@ namespace web.Api.Controllers
         [HttpPost("reply")]
         public JsonReturn SaveReply([FromForm]long blogAuthorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long fatherID)
         {
-            var userID = Convert.ToInt64(Request.Cookies["id"]);
             var bre = new BlogReplyEntity(){BlogID = blogID, BlogReplyAuthorID = userID, BlogReplyContent = content, BlogReplyLikeID = new HashSet<long>(), BlogReplyFatherID = fatherID};
             dbc.BlogReply.Add(bre);
             dbc.SaveChanges();
             wsa.WriteMsg(blogAuthorID, MessageType.BlogReply);
             return JsonReturn.ReturnSuccess();
         }
+
+       /* [HttpPost("like")]
+        public JsonReturn SendLike([FromForm]long authorID, [FromForm]string type)
+        {
+            
+        }*/
     }
 }
