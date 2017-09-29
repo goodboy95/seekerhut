@@ -15,11 +15,12 @@ namespace web.Controllers
         {
             _blogApi = new BlogApiController(dbc, logFac);
         }
-        [Route("index/{id?}")]
-        public IActionResult Index(string id)
+
+        [Route("index/{pageNumStr?}")]
+        public IActionResult Index(string pageNumStr)
         {
             var userID = Convert.ToInt64(Request.Cookies["id"]);
-            int.TryParse(id, out int pageNum);
+            int.TryParse(pageNumStr, out int pageNum);
             if (pageNum < 1) { pageNum = 1; }
             var blogListReturn = _blogApi.GetBlogList(userID, pageNum, 15);
             if (blogListReturn.Code != 0) { return Redirect("/error/page404"); }
@@ -32,15 +33,17 @@ namespace web.Controllers
                     blogListHtml += $"<a href=../content/{blogLink["BlogID"]}>{blogLink["BlogTitle"]}</a><br />\n\t";
                 }
                 ViewBag.BlogNum = blogListInfo["BlogNum"].ToString();
-                ViewBag.PageNum = id;
+                ViewBag.PageNum = pageNum;
                 ViewBag.BlogList = blogListHtml;
                 return View();
             }
         }
+
         [Route("writeblog")]
         public IActionResult WriteBlog() => View();
+
         [Route("content/{id}")]
-        public IActionResult Content(string id)
+        public IActionResult BlogContent(string id)
         {            
             var isIdNum = long.TryParse(id, out long blogId);
             var blogReturn = _blogApi.GetBlog(blogId);

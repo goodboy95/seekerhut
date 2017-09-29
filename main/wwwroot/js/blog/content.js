@@ -1,5 +1,5 @@
 window.onload = function(){
-    SocketConnect(close, SocketReceive, error);
+    //SocketConnect(close, SocketReceive, error);
     document.getElementById("menu-myblog").classList.add("layui-this");
 
     var layedit, contentBox, replyNum,
@@ -17,7 +17,8 @@ window.onload = function(){
             done: function(page, next){
                 $.get("/blogapi/replylist/", {blogID: id, pageNo: page, pageSize: 5}, function(resp){
                     if (parseInt(resp.code) === 0) { 
-                        var replyList = resp.data.replyList;
+                        replyNum = resp.data.ReplyNum;
+                        var replyList = resp.data.ReplyList;
                         for (var i = 0; i < replyList.length; i++) {
                             var author = replyList[i].author;
                             var content = replyList[i].content;

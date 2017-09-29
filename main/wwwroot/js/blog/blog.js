@@ -1,5 +1,5 @@
 window.onload = function(){
-    SocketConnect(close, SocketReceive, error);
+    //SocketConnect(close, SocketReceive, error);
     var blogNum = document.getElementById("blogNum").innerHTML;
     var pageNum = document.getElementById("pageNum").innerHTML;
     document.getElementById("menu-myblog").classList.add("layui-this");

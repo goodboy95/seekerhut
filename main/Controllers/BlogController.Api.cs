@@ -30,6 +30,8 @@ namespace web.Api.Controllers
         [HttpGet("blogList")]
         public JsonReturn GetBlogList([FromQuery]long authorID, [FromQuery]int pageNo, [FromQuery]int pageSize)
         {
+            if (pageNo < 1) { pageNo = 1; }
+            if (pageSize < 5) { pageSize = 5; }
             var skipRows = (pageNo - 1) * pageSize;
             var blogList = from blog in dbc.Blog where blog.BlogAuthorID == authorID 
             orderby blog.BlogID select new {blog.BlogTitle, blog.BlogID, blog.BlogCreateTime};
@@ -45,8 +47,8 @@ namespace web.Api.Controllers
             {
                 return JsonReturn.ReturnFail("页码超出范围！");
             }
-            
         }
+
         [HttpGet("blog")]
         public JsonReturn GetBlog([FromQuery]long id)
         {
@@ -102,31 +104,35 @@ namespace web.Api.Controllers
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
         }
+
         [HttpGet("Pic")]
         public JsonReturn Pic([FromQuery]int picId)
         {
             FileMetaEntity pic = dbc.FileMeta.Find(picId);
             if (pic == null) { return JsonReturn.ReturnFail("图片id不存在！"); }
-            return JsonReturn.ReturnSuccess(new {picPath = pic.FileMetaPath});
+            return JsonReturn.ReturnSuccess(new JObject(){["PicPath"] = pic.FileMetaPath});
         }
+
         [HttpGet("tagList")]
         public JsonReturn GetTagList([FromQuery]long userId)
         {
             var tagList = from t in dbc.BlogTagRelation where t.BtrUserID == userId select new{tagName = t.BtrTagName};
-            return JsonReturn.ReturnSuccess(new {tagList = tagList});
+            return JsonReturn.ReturnSuccess(tagList);
         }
+
         [HttpGet("blogsByTag")]
         public JsonReturn GetBlogsByTag([FromQuery]string tagName, [FromQuery]long userID)
         {
             var blogList = (from bl in dbc.BlogTagRelation where bl.BtrTagName == tagName && bl.BtrUserID == userID select bl.BlogIDList).FirstOrDefault();
             if (blogList == null) { blogList = new List<long>(); }
-            return JsonReturn.ReturnSuccess(new {blogList = blogList});
+            return JsonReturn.ReturnSuccess(blogList);
         }
+
         [HttpGet("replyList")]
         public JsonReturn GetReply([FromQuery]long blogID, [FromQuery]int pageNo, [FromQuery]int pageSize)
         {
-            if (pageNo <= 0) { pageNo = 1; }
-            if (pageSize <= 2) { pageSize = 5; }
+            if (pageNo < 1) { pageNo = 1; }
+            if (pageSize < 5) { pageSize = 5; }
             var skipRows = (pageNo - 1) * pageSize;
             var replyList = from r in dbc.BlogReply where r.BlogID == blogID join u in dbc.User on r.BlogReplyAuthorID equals u.UserID orderby r.BlogReplyID
                             select new {author = u.Name, content = r.BlogReplyContent, sendtime = dateTimeFormatter(r.BlogReplyCreateTime)};
@@ -134,13 +140,16 @@ namespace web.Api.Controllers
             if (replyNum > skipRows || pageNo == 1)
             {
                 replyList = replyList.Skip(skipRows).Take(pageSize);
-                return JsonReturn.ReturnSuccess(new {replyList = replyList, replyNum = replyNum});
+                var replyListStr = JsonConvert.SerializeObject(replyList);
+                var replyInfo = new JObject(){["ReplyNum"] = replyNum, ["ReplyList"] = JArray.Parse(replyListStr)};
+                return JsonReturn.ReturnSuccess(replyInfo);
             }
             else
             {
                 return JsonReturn.ReturnFail("页码超出范围！");
             }
         }
+        
         [HttpPost("reply")]
         public JsonReturn SaveReply([FromForm]long blogAuthorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long fatherID)
         {

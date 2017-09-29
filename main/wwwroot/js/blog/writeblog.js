@@ -8,7 +8,7 @@ function tagDelete(){
 }
 
 window.onload = function(){
-    SocketConnect(close, SocketReceive, error);
+    //SocketConnect(close, SocketReceive, error);
     document.getElementById("menu-writeblog").classList.add("layui-this");
 
     layui.use('layedit', function(){
