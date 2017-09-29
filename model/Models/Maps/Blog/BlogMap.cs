@@ -12,29 +12,28 @@ namespace Domain.Mapping
             var entity = modelBuilder.Entity<BlogEntity>();
 
             entity.ToTable("blog");
-            entity.HasKey(p => p.ID);
-            entity.Property(p => p.ID).HasColumnName("id").UseMySqlIdentityColumn();
-            entity.Property(p => p.CreateTime).HasColumnName("datetime");
-            entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
-            entity.Property(p => p.Title).HasColumnName("title").IsRequired();
-            entity.Property(p => p.AuthorID).HasColumnName("author_id").IsRequired();
-            entity.Property(p => p.Privacy).HasColumnName("privacy").IsRequired();
-            entity.Property(p => p.LikeNum).HasColumnName("like_num").IsRequired();
-            entity.Property(p => p.ReplyNum).HasColumnName("reply_num").IsRequired();
-            entity.Property(p => p.Content).HasColumnName("content").IsRequired();
-            entity.Property(p => p._likeID).HasColumnName("like_id").IsRequired();
-            entity.Property(p => p._dislikeID).HasColumnName("dislike_id").IsRequired();
-            entity.Property(p => p._awardGoldInfo).HasColumnName("award_gold_info").IsRequired();
-            entity.Property(p => p._visibleUserID).HasColumnName("visible_userid").IsRequired();
-            entity.Property(p => p._tags).HasColumnName("tags").IsRequired();
-            entity.Property(p => p._attachments).HasColumnName("attachments").IsRequired();
-            entity.HasIndex(p => p.AuthorID);
-            entity.Ignore(p => p.VisibleUserID);
-            entity.Ignore(p => p.Tags);
-            entity.Ignore(p => p.LikeID);
-            entity.Ignore(p => p.DislikeID);
-            entity.Ignore(p => p.AwardGoldInfo);
-            entity.Ignore(p => p.Attachments);
+            entity.HasKey(p => p.BlogID);
+            entity.Property(p => p.BlogID).HasColumnName("blog_id").UseMySqlIdentityColumn();
+            entity.Property(p => p.BlogCreateTime).HasColumnName("blog_create_time");
+            entity.Property(p => p.BlogIsDeleted).HasColumnName("blog_is_deleted");
+            entity.Property(p => p.BlogTitle).HasColumnName("blog_title").IsRequired();
+            entity.Property(p => p.BlogAuthorID).HasColumnName("blog_author_id").IsRequired();
+            entity.Property(p => p.BlogPrivacy).HasColumnName("blog_privacy").IsRequired();
+            entity.Property(p => p.BlogLikeNum).HasColumnName("blog_like_num").IsRequired();
+            entity.Property(p => p.BlogContent).HasColumnName("blog_content").IsRequired();
+            entity.Property(p => p._blogLikeID).HasColumnName("blog_like_id").IsRequired();
+            entity.Property(p => p._blogDislikeID).HasColumnName("blog_dislike_id").IsRequired();
+            entity.Property(p => p._blogAwardGoldInfo).HasColumnName("blog_award_gold_info").IsRequired();
+            entity.Property(p => p._blogVisibleUserID).HasColumnName("blog_visible_userid").IsRequired();
+            entity.Property(p => p._blogTags).HasColumnName("blog_tags").IsRequired();
+            entity.Property(p => p._blogAttachments).HasColumnName("blog_attachments").IsRequired();
+            entity.HasIndex(p => p.BlogAuthorID);
+            entity.Ignore(p => p.BlogVisibleUserID);
+            entity.Ignore(p => p.BlogTags);
+            entity.Ignore(p => p.BlogLikeID);
+            entity.Ignore(p => p.BlogDislikeID);
+            entity.Ignore(p => p.BlogAwardGoldInfo);
+            entity.Ignore(p => p.BlogAttachments);
         }
     }
 }

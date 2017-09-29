@@ -1,10 +1,7 @@
-using System;
-
-namespace Domain.Entity{
-    public class CommonDataEntity : BaseEntity
+namespace Domain.Entity
+{
+    public class CommonDataEntity
     {
-        public string Item { get; set; }
-        public string Value { get; set; }
-
+        
     }
 }

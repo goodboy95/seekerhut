@@ -21,7 +21,7 @@ window.onload = function(){
     document.getElementById("regSubmit").onclick = function(){
         $.ajax({
             type: "PUT",
-            url: "/api/home/register/",
+            url: "/api/homeapi/register/",
             data: {
                 __RequestVerificationToken: $("#reg").find("#token").find("input").val(),
                 username: $("#reg").find("#username").val(),
@@ -39,7 +39,7 @@ window.onload = function(){
         });
     };
     document.getElementById("loginSubmit").onclick = function(){
-        $.post("/api/home/login/", {
+        $.post("/api/homeapi/login/", {
             __RequestVerificationToken: $("#login").find("#token").find("input").val(),
             username: $("#login").find("#username").val(),
             password: md5($("#login").find("#password").val())

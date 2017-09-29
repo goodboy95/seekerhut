@@ -1,50 +1,54 @@
 window.onload = function(){
+    //SocketConnect(close, SocketReceive, error);
     document.getElementById("menu-myblog").classList.add("layui-this");
-    var layedit, contentBox, 
-        queryStr = window.location.href.split("?")[1], 
-        id = queryStr.split("=")[1];
+
+    var layedit, contentBox, replyNum,
+        id = document.getElementById("blogID").innerHTML,
+        finalPage = false, replies = "";
+
     layui.use('layedit', function(){
         layedit = layui.layedit;
         contentBox = layedit.build('replyText');
-    })
-    $.get("/api/blog/blog/", {id: id}, function(resp){
-        if (resp.code == 0){
-            var blog = resp.data.blog;
-            document.getElementById("title").innerHTML = blog.title;
-            document.getElementById("author").innerHTML = resp.data.authorName;
-            document.getElementById("createTime").innerHTML = resp.data.createTime;
-            document.getElementById("content").innerHTML = blog.content;
-        }
-        else{
-            alert(resp.msg);
-        }
     });
-    //TODO: 回复列表要改为点击按钮后再加载
-    $.get("/api/blog/replylist/", {blogID: id}, function(resp){
-        if (resp.code === 0) {
-            var replyText = "", 
-                replyList = resp.data.replyList;
-            for (var i = 0; i < replyList.length; i++) {
-                var author = replyList[i].authorID;
-                var content = replyList[i].content;
-                replyText += `<p>${author}说 : <br />${content}</p><br />`;
+    layui.use('flow', function(){
+        var flow = layui.flow;
+        flow.load({
+            elem: "#replyList",
+            done: function(page, next){
+                $.get("/blogapi/replylist/", {blogID: id, pageNo: page, pageSize: 5}, function(resp){
+                    if (parseInt(resp.code) === 0) { 
+                        replyNum = resp.data.ReplyNum;
+                        var replyList = resp.data.ReplyList;
+                        for (var i = 0; i < replyList.length; i++) {
+                            var author = replyList[i].author;
+                            var content = replyList[i].content;
+                            replies += `<p>${author}说 : <br />${content}</p><br />`;
+                        }
+                        document.getElementById("replyList").innerHTML = replies;
+                        next("", page * 5 < replyNum);
+                        if (page * 5 >= replyNum) { finalPage = true; }
+                    }
+                    else { return; }
+                });
             }
-            document.getElementById("replyList").innerHTML = replyText;
-        }
-        else {
-            alert(resp.msg);
-        }
+        });
     });
 
     document.getElementById("replySubmit").onclick = function(){
-        $.post("/api/blog/reply/", {
+        var replyContent = layedit.getContent(contentBox);
+        var userName = Cookies.get("username");
+        var authorID = document.getElementById("authorID").innerHTML;
+        $.post("/blogapi/reply/", {
+            blogAuthorID: authorID,
             blogID: id,
-            content: layedit.getContent(contentBox),
+            content: replyContent,
             __RequestVerificationToken: $("#token").find("input").val()
         }, function(resp){
             if (resp.code === 0){
                 alert("回复成功！");
-                location.reload();
+                if (!finalPage) { replyNum++; }
+                else { document.getElementById("replyList").innerHTML += `<p>${userName}说 : <br />${replyContent}</p><br />`; }
+                //layedit.setContent(contentBox, "");
             }
             else{
                 alert(resp.msg);

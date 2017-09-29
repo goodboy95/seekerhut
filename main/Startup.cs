@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
-//using NLog.Extensions.Logging;
+using NLog.Extensions.Logging;
 using Dao;
 using Middleware;
 using Utils;
@@ -47,10 +47,10 @@ namespace web
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            //loggerFactory.AddNLog().AddDebug();
+            loggerFactory.AddNLog().AddDebug();
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }
             else
@@ -59,7 +59,7 @@ namespace web
             }
             //app.UseSession();
             app.UseWebSockets();
-            //IConfigurationSection redisConf = Configuration.GetSection("Redis");
+            IConfigurationSection redisConf = Configuration.GetSection("Redis");
             //StackRedisHelper.InitRedis(redisConf.GetValue<string>("ConnStr"), redisConf.GetValue<Int32>("Database"), redisConf.GetValue<string>("Name"));
             //如/file对应的文件夹不存在，自动创建文件夹
             if (!Directory.Exists(Configuration.GetSection("VirtualPath").GetValue<string>("File")))

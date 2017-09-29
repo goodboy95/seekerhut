@@ -14,9 +14,9 @@ using System.Collections.Generic;
 namespace web.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class HomeController : ApiBaseController
+    public class HomeApiController : ApiBaseController
     {
-        public HomeController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public HomeApiController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
         {
         }
         protected override void LoginFail(ActionExecutingContext context)
@@ -42,7 +42,7 @@ namespace web.Api.Controllers
             string ip = new HttpParser(HttpContext).GetIPAddr();
             var loginIPDic = new Dictionary<string, bool>();
             loginIPDic.Add(ip, true);
-            UserEntity u = new UserEntity{Name = username, Pass = passHash, Salt = salt, LoginIP = loginIPDic};
+            UserEntity u = new UserEntity{Name = username, Pass = passHash, Salt = salt, LastLoginIP = ip, LoginIP = loginIPDic};
             dbc.User.Add(u);
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
@@ -66,9 +66,21 @@ namespace web.Api.Controllers
                     u.ExpireTime = DateTime.Now.AddMonths(1);
                     dbc.SaveChanges();
                 }
+                string ip = new HttpParser(HttpContext).GetIPAddr();
+                var loginIpDic = u.LoginIP;
+                if (!loginIpDic.ContainsKey(ip) || loginIpDic[ip] == false)
+                {
+                    if (!loginIpDic.ContainsKey(ip))
+                    {
+                        loginIpDic.Add(ip, false);
+                        u.LoginIP = loginIpDic;
+                        dbc.SaveChangesAsync();
+                    }
+                    //TODO: 陌生ip登录，进行身份验证
+                }
                 Response.Cookies.Append("username", username, new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
                 Response.Cookies.Append("token", u.Token, new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
-                Response.Cookies.Append("id", u.ID.ToString(), new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
+                Response.Cookies.Append("id", u.UserID.ToString(), new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
                 return JsonReturn.ReturnSuccess();
             }
         }

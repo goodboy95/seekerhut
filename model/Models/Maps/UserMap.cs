@@ -13,10 +13,10 @@ namespace Domain.Mapping
             var entity = modelBuilder.Entity<UserEntity>();
 
             entity.ToTable("user");
-            entity.HasKey(p => p.ID);
-            entity.Property(p => p.ID).HasColumnName("id");
-            entity.Property(p => p.CreateTime).HasColumnName("datetime");
-            entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+            entity.HasKey(p => p.UserID);
+            entity.Property(p => p.UserID).HasColumnName("user_id");
+            entity.Property(p => p.UserCreateTime).HasColumnName("user_create_time");
+            entity.Property(p => p.UserIsDeleted).HasColumnName("user_is_deleted");
             entity.Property(p => p.Name).HasColumnName("name").HasColumnType("varchar(30)").IsRequired();
             entity.Property(p => p.Pass).HasColumnName("pass").HasColumnType("varchar(64)").IsRequired();
             entity.Property(p => p.Salt).HasColumnName("salt").HasColumnType("varchar(64)").IsRequired();
