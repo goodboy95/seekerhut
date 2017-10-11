@@ -14,7 +14,7 @@ namespace web.Api.Controllers
 {
     public abstract class ApiBaseController : BaseController
     {
-        public ApiBaseController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public ApiBaseController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
         protected override void LoginFail(ActionExecutingContext context)

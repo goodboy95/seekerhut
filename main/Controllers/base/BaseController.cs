@@ -21,7 +21,7 @@ namespace web.Controllers
         protected ILogger _log;
         protected long userID;
         //protected StackRedisHelper redis;
-        public BaseController(DwDbContext dbc, ILoggerFactory logFac)
+        public BaseController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp)
         {
             this.dbc = dbc;
             _log = logFac.CreateLogger("seekerhut");

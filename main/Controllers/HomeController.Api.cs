@@ -16,7 +16,7 @@ namespace web.Api.Controllers
     [Route("[controller]")]
     public class HomeApiController : ApiBaseController
     {
-        public HomeApiController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public HomeApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
         protected override void LoginFail(ActionExecutingContext context)

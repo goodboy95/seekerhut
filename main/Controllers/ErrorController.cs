@@ -3,12 +3,13 @@ using Dao;
 using Utils;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 
 namespace web.Controllers
 {
     public class ErrorController : ViewBaseController
     {
-        public ErrorController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public ErrorController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
         protected override void LoginFail(ActionExecutingContext context)

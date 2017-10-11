@@ -10,7 +10,7 @@ namespace web.Controllers
 {
     public class HomeController : ViewBaseController
     {
-        public HomeController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public HomeController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
             
         }

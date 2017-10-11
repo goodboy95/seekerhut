@@ -15,7 +15,7 @@ namespace web.Api.Controllers
     [Route("[controller]")]
     public class BlogApiController : ApiBaseController
     {       
-        public BlogApiController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac){}
+        public BlogApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp){}
 
         private string dateTimeFormatter(DateTime dt)
         {

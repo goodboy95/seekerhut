@@ -11,9 +11,9 @@ namespace web.Controllers
     public class BlogController : ViewBaseController
     {
         private readonly BlogApiController _blogApi;
-        public BlogController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public BlogController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
-            _blogApi = new BlogApiController(dbc, logFac);
+            _blogApi = new BlogApiController(dbc, logFac, svp);
         }
 
         [Route("index/{pageNumStr?}")]

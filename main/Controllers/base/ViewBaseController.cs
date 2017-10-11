@@ -12,7 +12,7 @@ namespace web.Controllers
 {
     public abstract class ViewBaseController : BaseController
     {
-        public ViewBaseController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public ViewBaseController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
         protected override void LoginFail(ActionExecutingContext context)
