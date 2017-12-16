@@ -14,10 +14,10 @@
   <div id="token">
     @Html.AntiForgeryToken()
   </div>
-  <p>用户名：</p><input type="text" id="username" />
-  <p>密码：</p><input type="password" id="password" />
+  <p>用户名：</p><input type="text" id="reg-username" />
+  <p>密码：</p><input type="password" id="reg-password" />
   <br /><br />
-  <button id="regSubmit">注册</button>
+  <button id="regSubmit" class="layui-btn">注册</button>
 </div>
 
 <div id="login">
@@ -25,11 +25,11 @@
   <div id="token">
     @Html.AntiForgeryToken()
   </div>
-  <p>用户名：</p><input type="text" id="username" />
-  <p>密码：</p><input type="password" id="password" />
+  <p>用户名：</p><input type="text" id="login-username" />
+  <p>密码：</p><input type="password" id="login-password" />
   <br /><br />
-  <button id="loginSubmit">登录</button>
-  <button id="regWindow">注册账号</button>
+  <button id="loginSubmit" class="layui-btn">登录</button>
+  <button id="regWindow" class="layui-btn">注册账号</button>
 </div>
 
 <div id="userdata" hidden>

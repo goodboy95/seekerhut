@@ -27,9 +27,15 @@
     <p>添加回复：</p>
     <div>
         <textarea id="replyText"></textarea>
-        <button id="replySubmit">发送</button>
+        <button id="replySubmit" class="layui-btn">发送</button>
     </div>
     <p>回复：</p>
     <div id="replyList">
+        <ol>
+            <li v-for="reply in replies">
+                <p>{{ reply.author }} 说：</p>
+                <p>{{ reply.content }}</p>
+            </li>
+        </ol>
     </div>
 </div>

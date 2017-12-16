@@ -1,9 +1,1 @@
-var reconnects = 0;
-function SocketReceive(data) {
-    reconnects = 0;
-    socket.send("ok");
-    if (data !== "") {
-        var jdata = JSON.parse(data);
-        document.getElementById("notice").innerHTML = jdata["BlogReply"] > 0 ? jdata["BlogReply"] : 0;
-    }
-}
+"use strict";var reconnects=0;function SocketReceive(a){if(reconnects=0,socket.send("ok"),""!==a){var b=JSON.parse(a);document.getElementById("notice").innerHTML=0<b.BlogReply?b.BlogReply:0}}
