@@ -1,0 +1,18 @@
+#index-frame {
+    margin-top: 5%;
+    height: 40%;
+    width: 100%;
+    text-align: center;
+    
+}
+
+#popQuizTitle {
+    font: 50px arial,sans-serif;
+}
+
+#quizBlock {
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    /*background-image: url(../image/sky.jpg);*/
+}

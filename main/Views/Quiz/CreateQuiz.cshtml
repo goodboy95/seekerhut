@@ -1,0 +1,97 @@
+<link rel="stylesheet" href="~/css/create_quiz.css" />
+<script src="~/js/create_quiz.js"></script>
+
+<input id="editid" value="@(ViewBag.quesGroupId)" hidden />
+<div id="questionBox">
+    <label class="layui-form-label">Quiz title：</label>    
+    <div class="layui-input-block">
+        <input type="text" id="quizName" placeholder="Enter the title of this quiz here" autocomplete="off" class="layui-input">
+    </div>
+
+    <label class="layui-form-label">Quiz intro：</label>
+    <div class="layui-input-block">
+        <textarea id="introContext" style="display: none;"></textarea>
+    </div>
+
+    <label class="layui-form-label">Ques list：</label>
+    <table class="layui-table">
+        <colgroup>
+            <col>
+            <col>
+            <col>
+            <col />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Question No.</th>
+                <th>Question Name</th>
+                <th>Question Type</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody id="answerList"></tbody>
+    </table>
+</div>
+<div id="buttonGrp">
+    <button class="layui-btn" id="addQues">Add a question</button>
+    <button class="layui-btn" id="removeQues">Remove a question</button>
+    <button class="layui-btn" id="submit">Save quiz</button>
+</div>
+
+<!--Dom Items-->
+<div>
+
+    <table hidden>
+        <tr id="questionRow" class="ques-row">
+            <th class="quesID"></th>
+            <th class="quesName"></th>
+            <th class="quesType"></th>
+            <th><button id="openQues" class="layui-btn" onclick="EditQues(this)">Edit</button></th>
+        </tr>
+    </table>
+
+    <div id="quesEditor" class="layui-form" hidden>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Question title：</label>
+            <div class="layui-input-block">
+                <input type="text" id="quesName" name="quesName" placeholder="Enter the title here" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Question type：</label>
+            <div class="layui-input-block">
+                <select name="answerType" id="answerType" lay-filter="answerType" lay-verify="required">
+                    <option value="">Choose a question type</option>
+                    <option value="0">Text answer</option>
+                    <option value="2">Multiple choice</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" id="optionInput" hidden>
+            <div id="options">
+                <div id="o1" class="option-item">
+                    <p class="ques-num">Option 1:</p>
+                    <div class="layui-input-block">
+                        <input type="text" id="optionText" placeholder="Input Option Text" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-block">
+                        <input type="text" id="relatedQues" placeholder="Input related-question No., 0 stands for the end." autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="submit-button-area">
+                <button class="layui-btn" onclick="RemoveOption()">removeOption</button>
+                <button class="layui-btn" onclick="AddOption()">addOption</button>
+            </div>
+        </div>
+        <div class="layui-form-item" id="textQuesDetail" hidden>
+            <label class="layui-form-label">Next Question No.：</label>
+            <div class="layui-input-block">
+                <input type="text" id="textNextQues" name="nextQues" placeholder="Input next question No., 0 stands for the end." autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="submit-button-area">
+            <button class="layui-btn" lay-submit lay-filter="saveques">Save Question</button>
+        </div>
+    </div>
+</div>

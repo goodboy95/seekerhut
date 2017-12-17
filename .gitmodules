@@ -1,3 +1,0 @@
-[submodule "main/wwwroot/lib/layui_repo"]
-	path = main/wwwroot/lib/layui_repo
-	url = git@github.com:sentsin/layui.git

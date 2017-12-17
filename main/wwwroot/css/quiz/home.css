@@ -1,0 +1,34 @@
+﻿.login-menu {
+    display: inline;
+    margin-right: 0px;
+}
+
+.menu-text {
+    vertical-align: middle;
+}
+
+.right-menu {
+    width: 80%;
+    text-align: right;
+}
+
+.func-menu {
+    left: 10%;
+}
+
+.menu {
+    height: 59px;
+    border-bottom: 1px solid #404553;
+    background-color: #393D49;
+}
+
+#userdata {
+    position: absolute;
+    right: 20%;
+    top: 20px;
+    color: white;
+}
+
+#logout {
+    color: rgba(255, 255, 255, 0.7);
+}

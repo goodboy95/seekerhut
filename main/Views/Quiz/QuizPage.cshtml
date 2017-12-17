@@ -1,0 +1,46 @@
+@{
+    Layout = "_QuizLayout";
+}
+<link rel="stylesheet" href="~/css/quiz.css" />
+<script src="~/js/quiz.js"></script>
+<div hidden>
+    <input type="radio" id="optAnswer" name="answer" value="" title="">
+    <input id="quizID" value="@(ViewBag.quizID)" hidden>
+</div>
+
+<div id="quizbody">
+    <div id="intro">
+        <div id="titleBlock">
+            @ViewBag.Title
+        </div>
+        <div id="contextBlock">
+            <p>@Html.Raw(ViewBag.Intro)</p>
+        </div>
+        <button class="layui-btn layui-btn-big" id="startQuiz">Start</button>
+    </div>
+
+    <h1 class="ques-number"></h1>
+    <p class="ques-text"></p>
+    <br />
+    <div id="optionQues" class="layui-form" hidden>
+        <div class="layui-form-item">
+            <div id="optionArea">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+                <button class="layui-btn prev" lay-filter="prev" lay-submit>Prev</button>
+                <button class="layui-btn" lay-filter="optNext" lay-submit>Next</button>
+        </div>
+    </div>
+
+    <div id="textQues" class="layui-form" hidden>
+        <div class="layui-form-item">
+            <textarea id="answerArea" name="answer" placeholder="Input..." class="layui-textarea"></textarea>
+        </div>
+        <div class="layui-form-item">
+                <button class="layui-btn prev" lay-filter="prev" lay-submit>Prev</button>
+                <button class="layui-btn" lay-filter="textNext" lay-submit>Next</button>
+        </div>
+    </div>
+</div>

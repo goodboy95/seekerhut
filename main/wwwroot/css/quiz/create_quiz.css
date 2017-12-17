@@ -1,0 +1,22 @@
+body {
+    
+}
+
+#questionBox {
+    width: 80%;
+    margin: 40px auto;
+}
+
+#buttonGrp {
+    text-align: center;
+    margin: 50px auto;
+}
+
+.submit-button-area {
+    text-align: center;
+    margin: 50px auto;
+}
+
+.option-item {
+    margin: 10px;
+}

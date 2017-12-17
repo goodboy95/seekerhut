@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="~/css/answer_view.css" />
+<script src="~/js/answer_view.js"></script>
+<div hidden>
+    <table>
+        <tr id="answerRow">
+            <th id="answerID">AnswerID</th>
+            <th id="creator">Creator</th>
+            <th><button id="viewAnswer" class="layui-btn">View Answer</button></th>
+        </tr>
+    </table>
+    <div id="answerElem">
+        <p id="ques">Question:&nbsp;</p>
+        <p id="ans">Answer:&nbsp;</p>
+        <br />
+    </div>
+</div>
+<div id="answerText" hidden>
+
+</div>
+<table class="layui-table">
+    <colgroup>
+        <col>
+        <col>
+        <col>
+    </colgroup>
+    <thead>
+        <tr>
+            <th>AnswerID</th>
+            <th>quizName</th>
+            <th>Creator</th>
+            <th>View Answer</th>
+        </tr>
+    </thead>
+    <tbody id="answerList">
+
+    </tbody>
+</table>
+<button id="homepage" class="layui-btn">Back to homepage</button>
+
+<table hidden>
+    <tr id="ansRow" class="ans-row">
+        <th class="ansID"></th>
+        <th class="quizName"></th>
+        <th class="ansCreator"></th>
+        <th class="ansButton"><button class="layui-btn viewAnswer">View</button></th>
+    </tr>
+</table>

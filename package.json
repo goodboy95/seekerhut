@@ -1,0 +1,17 @@
+{
+  "name": "seekerhut",
+  "version": "1.0.0",
+  "description": "no",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.0.0",
+    "babel-minify": "^0.2.0",
+    "babel-preset-env": "^1.6.1"
+  },
+  "scripts": {
+    "build-mainblog": "babel main/wwwroot/js_src -d main/wwwroot/js && babel-minify main/wwwroot/js -d main/wwwroot/js"
+  },
+  "author": "",
+  "license": "ISC"
+}
