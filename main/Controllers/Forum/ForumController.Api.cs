@@ -12,7 +12,7 @@ namespace web.Api.Controllers
     [Route("api/[controller]")]
     public class ForumController : ApiBaseController
     {
-        public ForumController(DwDbContext dbc, ILoggerFactory logFac) : base(dbc, logFac)
+        public ForumController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
         [HttpGet("forumList")]
@@ -25,7 +25,7 @@ namespace web.Api.Controllers
         public JsonReturn GetPostList(int forumId, int pageNo, int pageSize)
         {
             int skipRows = (pageNo - 1) * pageSize;
-            var postList = from pl in dbc.ForumPost where pl.ForumID == forumId select new {pl.ID, pl.AuthorID, pl.Title, pl.ViewLevel};
+            var postList = from pl in dbc.ForumPost where pl.ForumID == forumId select new {pl.ForumID, pl.AuthorID, pl.Title, pl.ViewLevel};
             if (postList.Count() > skipRows || pageNo == 1) 
             {
                 postList = postList.Skip(skipRows).Take(pageSize);
@@ -41,7 +41,7 @@ namespace web.Api.Controllers
         {
             int skipped = (pageNo - 1) * pageSize;
             var postContent = dbc.ForumPost.Find(postId);
-            var replyList = from pl in dbc.ForumReply where pl.PostID == postId select pl;
+            var replyList = from pl in dbc.ForumReply where pl.ForumPostID == postId select pl;
             if (replyList.Count() > skipped) 
             {
                 replyList = replyList.Skip(skipped).Take(pageSize);

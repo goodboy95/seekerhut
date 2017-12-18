@@ -12,7 +12,7 @@ using Domain.Entity;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace simpleproj.Controllers
+namespace web.Controllers
 {
     public class QuizController : ViewBaseController
     {
@@ -21,7 +21,9 @@ namespace simpleproj.Controllers
         { 
             qac = new QuizApiController(dbc, logFac, svp);
         }
-
+        public IActionResult Index() => View();
+        public IActionResult QuizManage() => View();
+        public IActionResult AnswerView() => View();
         public IActionResult CreateQuiz([FromRoute]int id)
         {
             ViewBag.quesGroupId = id;
