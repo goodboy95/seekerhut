@@ -1,4 +1,7 @@
-﻿<script src="~/js/quiz_manage.js"></script>
+﻿@{
+    Layout = "_QuizHomeLayout";
+}
+<script src="~/js/quiz/quiz_manage.js"></script>
 <div>
     <table class="layui-table">
         <colgroup>
@@ -16,18 +19,18 @@
             </tr>
         </thead>
         <tbody id="quizList">
-
+            <tr id="quizRow" class="quiz-row" v-for="quiz in quizList">
+                <th>{{ quizID }}</th>
+                <th>{{ quizName }}</th>
+                <th>{{ url }}</th>
+                <th><button class="layui-btn" onclick="GotoQuiz(this)">Do this quiz</button></th>
+                <th><button class="layui-btn" onclick="EditQuesGroup(this)">Edit</button></th>
+            </tr>
         </tbody>
     </table>
     <button id="homepage" class="layui-btn">Back to homepage</button>
 </div>
 
 <table hidden>
-    <tr id="quizRow" class="quiz-row">
-        <th class="quesID"></th>
-        <th class="quesName"></th>
-        <th class="quesURL"></th>
-        <th><button class="layui-btn" onclick="GotoQuiz(this)">Do this quiz</button></th>
-        <th><button class="layui-btn" onclick="EditQuesGroup(this)">Edit</button></th>
-    </tr>
+    
 </table>

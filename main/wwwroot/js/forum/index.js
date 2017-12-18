@@ -1,0 +1,1 @@
+"use strict";window.onload=function(){$.get("/api/forum/forumList/",{},function(a){if(0===a.code){for(var b,c=a.data.forumList,d=0;d<c.length;d++){var e=c[d].id,f=c[d].name;b+="<a href=/forum/postlist?forumid="+e+">"+f+"</a>"}document.getElementById("forumList").innerHTML=b}})};

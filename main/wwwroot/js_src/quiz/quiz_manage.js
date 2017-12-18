@@ -1,13 +1,18 @@
-﻿window.onload = function () {
+﻿var quizArr = new Array();
+
+window.onload = function () {
     headerMenu();
+    var quizVue = new Vue({
+        el: "#quizList",
+        data: {
+            quizList: quizArr
+        }
+    });
     $.get("/quizApi/quiz_list", {}, function (resp, stat) {
         var quizList = resp.data;
         for (var i = 0; i < quizList.length; i++) {
-            var quizRow = $("#quizRow").clone(true);
-            quizRow.find(".quesID").html(quizList[i].quizID);
-            quizRow.find(".quesName").html(quizList[i].quizName);
-            quizRow.find(".quesURL").html(`http://www.seekerhut.com/quiz/quizpage/${quizList[i].quizID}`);
-            $("#quizList").append(quizRow);
+            quizList[i].url = `http://www.seekerhut.com/quiz/quizpage/${quizList[i].quizID}`;
+            quizArr.push(quizList[i]);
         }
     });
 
