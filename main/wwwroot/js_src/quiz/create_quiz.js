@@ -1,3 +1,6 @@
+require("./headerMenu");
+var $ = require("jquery");
+
 var quesNum = 0;
 var optionNum = 1;
 var curQuesNum = 0;
@@ -151,7 +154,6 @@ function SaveQues(data) {
 };
 
 window.onload = async function () {
-    headerMenu();
     var editQuesgroupId = parseInt($("#editid").val());
     var quizIntro = null;
     await layui.use('layedit', function(){

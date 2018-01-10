@@ -1,9 +1,11 @@
-﻿var layer;
+﻿require("./headerMenu");
+var $ = require("jquery");
+
+var layer;
 var answerList;
 var quesArr;
 
 window.onload = function () {
-    headerMenu();
     RenderAnswerList();
     layui.use("layer", function () {
         layer = layui.layer;
@@ -11,7 +13,7 @@ window.onload = function () {
             var answerID = parseInt($(btn.target).parents("#ansRow").find(".ansID").html()) - 1;
             layer.open({
                 type: 1,
-                title: 'Answer List',
+                title: "Answer List",
                 content: $("#answerText"),
                 success: function (dom, index) {
                     $("#answerText").empty();

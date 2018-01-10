@@ -1,3 +1,6 @@
+var $ = require("jquery");
+var layui = require("layui");
+
 var replyArr = new Array();
 
 window.onload = function(){
@@ -12,11 +15,11 @@ window.onload = function(){
         id = document.getElementById("blogID").innerHTML,
         finalPage = false, replies = "";
 
-    layui.use('layedit', function(){
+    layui.use("layedit", function(){
         layedit = layui.layedit;
-        contentBox = layedit.build('replyText');
+        contentBox = layedit.build("replyText");
     });
-    layui.use('flow', function(){
+    layui.use("flow", function(){
         var flow = layui.flow;
         flow.load({
             elem: "#replyList",

@@ -1,3 +1,5 @@
+var $ = require("jquery");
+var layui = require("layui");
 var form;
 var currentQues = 0;
 var quesCount = 0;
@@ -32,7 +34,6 @@ function OnNextClick(quizID, data) {
             window.location.href = "/";
         });
     }
-    
     return false;
 }
 
@@ -44,8 +45,6 @@ function RenderQuestion() {
     var ques = quizBody[currentQues];
     var quesName = ques.quesName;
     var optionArr = ques.options;
-    console.log(currentQues);
-    console.log(currentQues === 0);
     if (currentQues === 0) {
         $(".prev").hide();
     }
@@ -66,7 +65,7 @@ function RenderQuestion() {
             }
             $("#optionArea").append($(optionBody)).append("<br />");
         }
-        form.render('radio');
+        form.render("radio");
     }
     else {
         $("#optionQues").hide();

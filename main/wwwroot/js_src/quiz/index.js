@@ -1,3 +1,1 @@
-window.onload = function () {
-    headerMenu();
-};
+require("./headerMenu");

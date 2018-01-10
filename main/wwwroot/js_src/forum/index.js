@@ -1,3 +1,5 @@
+var $ = require("jquery");
+
 window.onload = function(){
     $.get("/api/forum/forumList/", {}, function(resp){
         if (resp.code === 0){

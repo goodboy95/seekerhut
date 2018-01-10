@@ -8,13 +8,15 @@
   },
   "devDependencies": {
     "babel-cli": "^6.0.0",
+    "babel-loader": "^7.1.2",
     "babel-minify": "^0.2.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.14.0",
     "webpack": "^3.10.0"
   },
   "scripts": {
-    "build": "babel main/wwwroot/js_src -d main/wwwroot/js && babel-minify main/wwwroot/js -d main/wwwroot/js"
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC"

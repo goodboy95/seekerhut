@@ -1,1 +1,0 @@
-"use strict";var layer,form;function headerMenu(){document.getElementById("create").onclick=function(){return window.location.href="/quiz/createquiz",!1},document.getElementById("quiz-manage").onclick=function(){return window.location.href="/home/quizmanage",!1},document.getElementById("answer-manage").onclick=function(){return window.location.href="/home/answerview",!1}}

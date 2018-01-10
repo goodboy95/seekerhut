@@ -1,6 +1,4 @@
-﻿var layer, form;
-
-function headerMenu() {
+﻿function headerMenu() {
     document.getElementById("create").onclick = function () {
         window.location.href = "/quiz/createquiz";
         return false;
@@ -13,4 +11,12 @@ function headerMenu() {
         window.location.href = "/home/answerview";
         return false;
     };
+    var userdata = new Vue({
+        el: "#userdata",
+        data: {
+            username: "234"
+        }
+    });
 }
+
+module.exports = headerMenu();

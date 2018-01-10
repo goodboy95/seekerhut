@@ -1,7 +1,8 @@
-﻿var quizArr = new Array();
+﻿require("./headerMenu");
+var $ = require("jquery");
+var quizArr = new Array();
 
 window.onload = function () {
-    headerMenu();
     var quizVue = new Vue({
         el: "#quizList",
         data: {
