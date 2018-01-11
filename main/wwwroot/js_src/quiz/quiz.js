@@ -1,5 +1,5 @@
-var $ = require("jquery");
-var layui = require("layui");
+var $ = require('jquery');
+var layui = require('layui');
 var form;
 var currentQues = 0;
 var quesCount = 0;
@@ -12,7 +12,7 @@ function OnNextClick(quizID, data) {
     var ansObj = new Object();
     var quesType = data.quesType;
     var optionsObj = quizBody[currentQues].options;
-    if (quesType === "single") {
+    if (quesType === 'single') {
         nextQues = parseInt(quizBody[currentQues].nextQues);
     }
     else {
@@ -29,63 +29,63 @@ function OnNextClick(quizID, data) {
         RenderQuestion();
     }
     else {
-        $.post("/quizApi/answer", {quizID: quizID, answer: JSON.stringify(answerArr)}, function(resp, stat){
-            alert("You have successfully finished this quiz!");
-            window.location.href = "/";
+        $.post('/quizApi/answer', {quizID: quizID, answer: JSON.stringify(answerArr)}, function(resp, stat){
+            alert('You have successfully finished this quiz!');
+            window.location.href = '/';
         });
     }
     return false;
 }
 
 function RenderQuestion() {
-    $("#optQuesTitle").html("");
-    $("#textQuesTitle").html("");
-    $("#optionArea").html("");
-    $("#answerArea").val("");
+    $('#optQuesTitle').html('');
+    $('#textQuesTitle').html('');
+    $('#optionArea').html('');
+    $('#answerArea').val('');
     var ques = quizBody[currentQues];
     var quesName = ques.quesName;
     var optionArr = ques.options;
     if (currentQues === 0) {
-        $(".prev").hide();
+        $('.prev').hide();
     }
     else {
-        $(".prev").show();
+        $('.prev').show();
     }
-    $(".ques-number").html(`Question ${quesCount+1}`);
-    $(".ques-text").html(`${quesName}`);
+    $('.ques-number').html(`Question ${quesCount+1}`);
+    $('.ques-text').html(`${quesName}`);
     if (parseInt(ques.answerType) === 2) {
-        $("#optionQues").show();
-        $("#textQues").hide();
+        $('#optionQues').show();
+        $('#textQues').hide();
         for (var i = 0; i < optionArr.length; i++) {
-            var optionBody = document.getElementById("optAnswer").cloneNode(true);
+            var optionBody = document.getElementById('optAnswer').cloneNode(true);
             optionBody.value = i;
             optionBody.title = optionArr[i].text;
             if (i === 0) {
                 optionBody.checked = true;
             }
-            $("#optionArea").append($(optionBody)).append("<br />");
+            $('#optionArea').append($(optionBody)).append('<br />');
         }
-        form.render("radio");
+        form.render('radio');
     }
     else {
-        $("#optionQues").hide();
-        $("#textQues").show();
+        $('#optionQues').hide();
+        $('#textQues').show();
     }
 }
 
 window.onload = function () {
-    var quizID = document.getElementById("quizID").value;
-    layui.use("form", function(){
+    var quizID = document.getElementById('quizID').value;
+    layui.use('form', function(){
         form = layui.form;
-        form.on("submit(optNext)", function(data){
-            data.quesType = "multiple";
+        form.on('submit(optNext)', function(data){
+            data.quesType = 'multiple';
             OnNextClick(quizID, data);
         });
-        form.on("submit(textNext)", function(data){
-            data.quesType = "single";
+        form.on('submit(textNext)', function(data){
+            data.quesType = 'single';
             OnNextClick(quizID, data);
         });
-        form.on("submit(prev)", function(data) {
+        form.on('submit(prev)', function(data) {
             currentQues = quesRoute[quesCount-1];
             quesCount--;
             answerArr.pop();
@@ -93,9 +93,9 @@ window.onload = function () {
             RenderQuestion();
         });
     });
-    document.getElementById("startQuiz").onclick = function() {
-        $("#intro").hide();
-        $.get("/quizApi/quiz", {quizID: quizID}, function(resp, stat){
+    document.getElementById('startQuiz').onclick = function() {
+        $('#intro').hide();
+        $.get('/quizApi/quiz', {quizID: quizID}, function(resp, stat){
             quizBody = JSON.parse(resp.data.quizBody);
             RenderQuestion();
         });

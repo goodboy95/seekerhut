@@ -1,7 +1,7 @@
-var $ = require("jquery");
+var $ = require('jquery');
 
 window.onload = function(){
-    $.get("/api/forum/forumList/", {}, function(resp){
+    $.get('/api/forum/forumList/', {}, function(resp){
         if (resp.code === 0){
             var forumList = resp.data.forumList;
             var forumListHTML;
@@ -10,7 +10,7 @@ window.onload = function(){
                 var forumName = forumList[i].name;
                 forumListHTML += `<a href=/forum/postlist?forumid=${forumId}>${forumName}</a>`;
             }
-            document.getElementById("forumList").innerHTML = forumListHTML;
+            document.getElementById('forumList').innerHTML = forumListHTML;
         }
     });
 };
