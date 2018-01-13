@@ -5,7 +5,6 @@ namespace Domain.Entity
 {
     public class ForumEntity : BaseEntity
     {
-        public long ForumID { get; set; }
         public string Name { get; set; }
         public int CreatorID { get; set; }
         public int ViewLevel { get; set; }

@@ -13,8 +13,8 @@ namespace Domain.Mapping
             var entity = modelBuilder.Entity<ForumPostEntity>();
 
             entity.ToTable("forum_post");
-            entity.HasKey(p => p.ForumPostID);
-            entity.Property(p => p.ForumPostID).HasColumnName("forum_post_id").UseMySqlIdentityColumn();
+            entity.HasKey(p => p.ID);
+            entity.Property(p => p.ID).HasColumnName("id").UseMySqlIdentityColumn();
             entity.Property(p => p.CreateTime).HasColumnName("datetime");
             entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
             entity.Property(p => p.ForumID).HasColumnName("forum_id").IsRequired();

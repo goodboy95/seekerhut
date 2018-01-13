@@ -9,6 +9,7 @@ namespace Domain.Entity
             CreateTime = DateTime.Now;
             IsDeleted = false;
         }
+        public long ID { get; set; }
         public DateTime CreateTime { get; set; }
         public bool IsDeleted { get; set; }
     }

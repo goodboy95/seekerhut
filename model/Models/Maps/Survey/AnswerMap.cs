@@ -9,14 +9,14 @@ namespace Domain.Mapping
         {
             var entity = modelBuilder.Entity<AnswerEntity>();
             entity.ToTable("answer");
-            entity.HasKey(p => p.AnswerID);
-            entity.Property(p => p.AnswerID).HasColumnName("answer_id");
-            entity.Property(p => p.AnswerCreateTime).HasColumnName("answer_create_time");
-            entity.Property(p => p.AnswerIsDeleted).HasColumnName("answer_is_deleted");
-            entity.Property(p => p.AnswerIP).HasColumnName("answer_ip").HasColumnType("varchar(100)").IsRequired();
+            entity.HasKey(p => p.ID);
+            entity.Property(p => p.ID).HasColumnName("id");
+            entity.Property(p => p.CreateTime).HasColumnName("create_time");
+            entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(p => p.SourceIP).HasColumnName("source_ip").HasColumnType("varchar(100)").IsRequired();
             entity.Property(p => p.QuizID).HasColumnName("quiz_id").IsRequired();
-            entity.Property(p => p.AnswerCreator).HasColumnName("answer_creator");
-            entity.Property(p => p.AnswerBody).HasColumnName("answer_body").IsRequired();
+            entity.Property(p => p.CreatorID).HasColumnName("creator");
+            entity.Property(p => p.Body).HasColumnName("body").IsRequired();
             //entity.Ignore(p => p.AnswerBody);
         }
     }

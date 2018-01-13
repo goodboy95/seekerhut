@@ -12,17 +12,17 @@ namespace Domain.Mapping
         {
             var entity = modelBuilder.Entity<QuizEntity>();
             entity.ToTable("quiz");
-            entity.HasKey(p => p.QuizID);
-            entity.Property(p => p.QuizID).HasColumnName("quiz_id");
-            entity.Property(p => p.QuizCreateTime).HasColumnName("quiz_create_time");
-            entity.Property(p => p.QuizCreator).HasColumnName("quiz_creator");
-            entity.Property(p => p.QuizIsDeleted).HasColumnName("quiz_is_deleted");
-            entity.Property(p => p.QuizName).HasColumnName("quiz_name").HasColumnType("varchar(80)").IsRequired();
-            entity.Property(p => p.QuizIntro).HasColumnName("quiz_intro").HasColumnType("varchar(255)");
-            entity.Property(p => p.QuizPicPath).HasColumnName("quiz_picpath");
-            entity.Property(p => p.QuizBody).HasColumnName("quiz_body").IsRequired();
-            entity.Property(p => p._quizLikes).HasColumnName("quiz_likes").IsRequired();
-            entity.Ignore(p => p.QuizLikes);
+            entity.HasKey(p => p.ID);
+            entity.Property(p => p.ID).HasColumnName("id");
+            entity.Property(p => p.CreateTime).HasColumnName("create_time");
+            entity.Property(p => p.CreatorID).HasColumnName("creator");
+            entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(p => p.Name).HasColumnName("name").HasColumnType("varchar(80)").IsRequired();
+            entity.Property(p => p.Intro).HasColumnName("intro").HasColumnType("varchar(255)");
+            entity.Property(p => p.PicPath).HasColumnName("picpath");
+            entity.Property(p => p.Body).HasColumnName("body").IsRequired();
+            entity.Property(p => p._likes).HasColumnName("likes").IsRequired();
+            entity.Ignore(p => p.Likes);
         }
     }
 }

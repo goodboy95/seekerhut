@@ -67,16 +67,16 @@ namespace web.Api.Controllers
         {
             var quizObj = new QuizEntity();
             int.TryParse(Request.Cookies["id"], out int creator);
-            quizObj.QuizBody = quizJson;
-            quizObj.QuizName = quizName;
-            quizObj.QuizIntro = quizIntro;
-            quizObj.QuizCreator = creator;
-            quizObj.QuizLikes = new List<string>();
+            quizObj.Body = quizJson;
+            quizObj.Name = quizName;
+            quizObj.Intro = quizIntro;
+            quizObj.CreatorID = creator;
+            quizObj.Likes = new List<string>();
             dbc.Quiz.Add(quizObj);
             if (quizId > 0)
             {
                 var prevQues = dbc.Quiz.Find(quizId);
-                prevQues.QuizIsDeleted = true;
+                prevQues.IsDeleted = true;
                 dbc.Quiz.Update(prevQues);
             }
             dbc.SaveChanges();
@@ -94,10 +94,10 @@ namespace web.Api.Controllers
         {
             var answerObj = new AnswerEntity();
             int.TryParse(Request.Cookies["id"], out int creator);  //暂时没有用户名
-            answerObj.AnswerCreator = creator;
-            answerObj.AnswerIP = new HttpParser(HttpContext).GetIPAddr();
+            answerObj.CreatorID = creator;
+            answerObj.SourceIP = new HttpParser(HttpContext).GetIPAddr();
             answerObj.QuizID = quizID;
-            answerObj.AnswerBody = answer;
+            answerObj.Body = answer;
             dbc.Answer.Add(answerObj);
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
@@ -124,8 +124,8 @@ namespace web.Api.Controllers
         {
             var answerEntity = dbc.Answer.Find(answerID);
             var relQuizID = answerEntity.QuizID;
-            var answerBody = answerEntity.AnswerBody;
-            var quizBody = dbc.Quiz.Find(relQuizID).QuizBody;
+            var answerBody = answerEntity.Body;
+            var quizBody = dbc.Quiz.Find(relQuizID).Body;
             var result = new JObject(){ ["quizBody"] = quizBody, ["answerBody"] = answerBody };
             return JsonReturn.ReturnSuccess(result);
         }
@@ -137,7 +137,7 @@ namespace web.Api.Controllers
         [HttpGet("quiz_list")]
         public ActionResult GetQuizList()
         {
-            var quizList = from al in dbc.Quiz where al.QuizIsDeleted == false select al;
+            var quizList = from al in dbc.Quiz where al.IsDeleted == false select al;
             return JsonReturn.ReturnSuccess(quizList);
         }
         
@@ -150,9 +150,9 @@ namespace web.Api.Controllers
         {
             var quizList = from sl in dbc.Quiz select sl;
             var answerList = from al in dbc.Answer
-            join ql in quizList on al.QuizID equals ql.QuizID
-            select new { AnswerID = al.AnswerID, AnswerBody = al.AnswerBody, AnswerIP = al.AnswerIP,
-                QuizName = ql.QuizName, QuizBody = ql.QuizBody };
+            join ql in quizList on al.QuizID equals ql.ID
+            select new { AnswerID = al.ID, AnswerBody = al.Body, AnswerIP = al.SourceIP,
+                QuizName = ql.Name, QuizBody = ql.Body };
             return JsonReturn.ReturnSuccess(answerList);
         }
 

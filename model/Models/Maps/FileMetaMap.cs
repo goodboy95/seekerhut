@@ -12,14 +12,14 @@ namespace Domain.Mapping
             var entity = modelBuilder.Entity<FileMetaEntity>();
 
             entity.ToTable("file_meta");
-            entity.HasKey(p => p.FileMetaID);
-            entity.Property(p => p.FileMetaID).HasColumnName("file_meta_id").UseMySqlIdentityColumn();
-            entity.Property(p => p.FileMetaCreateTime).HasColumnName("file_meta_create_time");
-            entity.Property(p => p.FileMetaIsDeleted).HasColumnName("file_meta_is_deleted");
-            entity.Property(p => p.FileMetaName).HasColumnName("file_meta_name").HasColumnType("varchar(50)").IsRequired();
-            entity.Property(p => p.FileMetaSha256).HasColumnName("file_meta_sha256").HasColumnType("varchar(64)").IsRequired();
-            entity.Property(p => p.FileMetaSize).HasColumnName("file_meta_size").IsRequired();
-            entity.Property(p => p.FileMetaPath).HasColumnName("file_meta_path").HasColumnType("varchar(100)").IsRequired();
+            entity.HasKey(p => p.ID);
+            entity.Property(p => p.ID).HasColumnName("id").UseMySqlIdentityColumn();
+            entity.Property(p => p.CreateTime).HasColumnName("create_time");
+            entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+            entity.Property(p => p.Name).HasColumnName("name").HasColumnType("varchar(50)").IsRequired();
+            entity.Property(p => p.Sha256).HasColumnName("sha256").HasColumnType("varchar(64)").IsRequired();
+            entity.Property(p => p.Size).HasColumnName("size").IsRequired();
+            entity.Property(p => p.Path).HasColumnName("path").HasColumnType("varchar(100)").IsRequired();
         }
     }
 }

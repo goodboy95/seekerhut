@@ -1,15 +1,19 @@
 var Vue = require('vue');
 var VueRouter = require('vue-router');
-var AdminIndex = require('./templates/index.vue');
 
 Vue.use(VueRouter);
 Vue.config.debug = true;
 Vue.config.devtools = true;
 
 var routes = [
-    {path: '/', components: AdminIndex},
-    // {path: '/list', components: require('./components/list')},
-    // {path: '*', components: require('./components/notFound')}
+    {
+        path: '/', 
+        components: require('./templates/index.vue'),
+        children: [
+            { path: 'blog-manage', components: require('./templates/bloglist.vue') },
+            { path: 'blog-recov',components: require('./templates/xb.vue') }
+        ]
+    },
 ];
 
 const router = new VueRouter({

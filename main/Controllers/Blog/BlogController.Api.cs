@@ -23,26 +23,22 @@ namespace web.Api.Controllers
             else { return dt.ToString("HH:mm"); }
         }
 
-        [HttpGet("blogList")]
-        public JsonReturn GetBlogList([FromQuery]long authorID, [FromQuery]int pageNo, [FromQuery]int pageSize)
+        [HttpGet("blog_list")]
+        public JsonReturn GetBlogList([FromQuery]int pageNo, [FromQuery]int pageSize)
         {
-            if (pageNo < 1) { pageNo = 1; }
-            if (pageSize < 5) { pageSize = 5; }
             var skipRows = (pageNo - 1) * pageSize;
-            var blogList = from blog in dbc.Blog where blog.BlogAuthorID == authorID 
-            orderby blog.BlogID select new {blog.BlogTitle, blog.BlogID, blog.BlogCreateTime};
+            var userID = Convert.ToInt64(Request.Cookies["id"]);
+            var blogList = dbc.Blog.Where(b => b.AuthorID == userID)
+                                .Join(dbc.User, b => b.AuthorID, u => u.ID, (b, u) => new { u.Name, b.Title })
+                                .AsEnumerable().Select(b => new JObject(){ ["author"] = b.Name, ["blog_title"] = b.Title });
             var blogNum = blogList.Count();
             if (blogNum > skipRows || pageNo == 1) 
             {
-                blogList = blogList.Skip(skipRows).Take(pageSize);
-                var blogListStr = JsonConvert.SerializeObject(blogList);
-                var blogListInfo = new JObject(){["BlogNum"] = blogNum, ["BlogList"] = JArray.Parse(blogListStr)};
-                return JsonReturn.ReturnSuccess(blogListInfo);
+                if (pageNo >= 1) { blogList = blogList.Skip(skipRows); }
+                if (pageSize >= 1) { blogList = blogList.Take(pageSize); }
+                return JsonReturn.ReturnSuccess(new { blogNum = blogNum, blogList = blogList });
             }
-            else
-            {
-                return JsonReturn.ReturnFail("页码超出范围！");
-            }
+            else{ return JsonReturn.ReturnFail("页码超出范围！"); }
         }
 
         [HttpGet("blog")]
@@ -50,18 +46,18 @@ namespace web.Api.Controllers
         {
             var blog = dbc.Blog.Find(id);
             if (blog == null) { return JsonReturn.ReturnFail("该日志不存在！"); }
-            if ((blog.BlogPrivacy & 0b10) != 0 && userID != blog.BlogAuthorID) 
+            if ((blog.Privacy & 0b10) != 0 && userID != blog.AuthorID) 
                 return JsonReturn.ReturnFail("你无权访问该日志！");
-            else if ((blog.BlogPrivacy & 0b01) != 0)
+            else if ((blog.Privacy & 0b01) != 0)
             {
-                var visibleIds = blog.BlogVisibleUserID;
+                var visibleIds = blog.VisibleUserID;
                 if (visibleIds.IndexOf(userID) == -1)
                     return JsonReturn.ReturnFail("你无权访问该日志！");
             }
             var blogInfo = JObject.Parse(JsonConvert.SerializeObject(blog));
-            var authorID = blog.BlogAuthorID;
-            blogInfo["CreateTimeStr"] = dateTimeFormatter(blog.BlogCreateTime);
-            blogInfo["AuthorName"] = (from u in dbc.User where u.UserID == authorID select u.Name).FirstOrDefault();
+            var authorID = blog.AuthorID;
+            blogInfo["CreateTimeStr"] = dateTimeFormatter(blog.CreateTime);
+            blogInfo["AuthorName"] = (from u in dbc.User where u.ID == authorID select u.Name).FirstOrDefault();
             if (blogInfo["AuthorName"] == null) { blogInfo["AuthorName"] = "幽灵用户"; }
             return JsonReturn.ReturnSuccess(blogInfo);
         }
@@ -75,26 +71,26 @@ namespace web.Api.Controllers
             }
             title = HTMLEntity.XSSConvert(title);
             var tagSet = new HashSet<string>();
-            BlogEntity blog = new BlogEntity { BlogTitle = title, BlogAuthorID = userID, BlogPrivacy = privacy, BlogVisibleUserID = new List<long>(), BlogTags = new HashSet<string>(), 
-                                                BlogLikeNum = 0, BlogContent = content, BlogAttachments = new List<FileMetaEntity>(), BlogLikeID = new HashSet<long>(),
-                                                BlogDislikeID = new HashSet<long>(), BlogAwardGoldInfo = new Dictionary<long, int>() };
+            var blog = new BlogEntity { Title = title, AuthorID = userID, Privacy = privacy, VisibleUserID = new List<long>(), Tags = new HashSet<string>(), 
+                                                LikeNum = 0, Content = content, Attachments = new List<FileMetaEntity>(), LikeID = new HashSet<long>(),
+                                                DislikeID = new HashSet<long>(), AwardGoldInfo = new Dictionary<long, int>() };
             dbc.Blog.Add(blog);
             dbc.SaveChanges();  //提前保存一遍，以便获取博客的id
             foreach(var i in tags)
             {
                 tagSet.Add(i);
-                var tagUser = (from tr in dbc.BlogTagRelation where tr.BtrUserID == userID && tr.BtrTagName == i select tr).FirstOrDefault();
+                var tagUser = (from tr in dbc.BlogTagRelation where tr.UserID == userID && tr.TagName == i select tr).FirstOrDefault();
                 if (tagUser == null)
                 {
-                    tagUser = new BlogTagRelationEntity{BtrTagName = i, BtrUserID = userID, BlogIDList = new List<long>()};
+                    tagUser = new BlogTagRelationEntity{TagName = i, UserID = userID, BlogIDList = new List<long>()};
                 }
                 var tmpBlogIDList = tagUser.BlogIDList;
-                tmpBlogIDList.Add(blog.BlogID);
+                tmpBlogIDList.Add(blog.ID);
                 tagUser.BlogIDList = tmpBlogIDList;
-                if (tagUser.BtrID == 0) { dbc.BlogTagRelation.Add(tagUser); }
+                if (tagUser.ID == 0) { dbc.BlogTagRelation.Add(tagUser); }
                 else { dbc.BlogTagRelation.Update(tagUser); };
             }
-            blog.BlogTags = tagSet;
+            blog.Tags = tagSet;
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
         }
@@ -104,20 +100,20 @@ namespace web.Api.Controllers
         {
             FileMetaEntity pic = dbc.FileMeta.Find(picId);
             if (pic == null) { return JsonReturn.ReturnFail("图片id不存在！"); }
-            return JsonReturn.ReturnSuccess(new JObject(){["PicPath"] = pic.FileMetaPath});
+            return JsonReturn.ReturnSuccess(new JObject(){["PicPath"] = pic.Path});
         }
 
         [HttpGet("tagList")]
         public JsonReturn GetTagList([FromQuery]long userId)
         {
-            var tagList = from t in dbc.BlogTagRelation where t.BtrUserID == userId select new{tagName = t.BtrTagName};
+            var tagList = from t in dbc.BlogTagRelation where t.UserID == userId select new{tagName = t.TagName};
             return JsonReturn.ReturnSuccess(tagList);
         }
 
         [HttpGet("blogsByTag")]
         public JsonReturn GetBlogsByTag([FromQuery]string tagName, [FromQuery]long userID)
         {
-            var blogList = (from bl in dbc.BlogTagRelation where bl.BtrTagName == tagName && bl.BtrUserID == userID select bl.BlogIDList).FirstOrDefault();
+            var blogList = (from bl in dbc.BlogTagRelation where bl.TagName == tagName && bl.UserID == userID select bl.BlogIDList).FirstOrDefault();
             if (blogList == null) { blogList = new List<long>(); }
             return JsonReturn.ReturnSuccess(blogList);
         }
@@ -128,8 +124,8 @@ namespace web.Api.Controllers
             if (pageNo < 1) { pageNo = 1; }
             if (pageSize < 5) { pageSize = 5; }
             var skipRows = (pageNo - 1) * pageSize;
-            var replyList = from r in dbc.BlogReply where r.BlogID == blogID join u in dbc.User on r.BlogReplyAuthorID equals u.UserID orderby r.BlogReplyID
-                            select new {author = u.Name, content = r.BlogReplyContent, sendtime = dateTimeFormatter(r.BlogReplyCreateTime)};
+            var replyList = from r in dbc.BlogReply where r.BlogID == blogID join u in dbc.User on r.AuthorID equals u.ID orderby r.ID
+                            select new {author = u.Name, content = r.Content, sendtime = dateTimeFormatter(r.CreateTime)};
             var replyNum = replyList.Count();
             if (replyNum > skipRows || pageNo == 1)
             {
@@ -147,7 +143,7 @@ namespace web.Api.Controllers
         [HttpPost("reply")]
         public JsonReturn SaveReply([FromForm]long blogAuthorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long fatherID)
         {
-            var bre = new BlogReplyEntity(){BlogID = blogID, BlogReplyAuthorID = userID, BlogReplyContent = content, BlogReplyLikeID = new HashSet<long>(), BlogReplyFatherID = fatherID};
+            var bre = new BlogReplyEntity(){BlogID = blogID, AuthorID = userID, Content = content, LikeID = new HashSet<long>(), FatherID = fatherID};
             dbc.BlogReply.Add(bre);
             dbc.SaveChanges();
             wsa.WriteMsg(blogAuthorID, MessageType.BlogReply);

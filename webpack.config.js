@@ -12,7 +12,7 @@ module.exports = {
     externals: {
         jquery: 'jQuery',
         layui: 'layui',
-        //vue: 'vue',
+        vue: 'Vue',
         //vuerouter: 'vue-router'
     },
     resolve: {
@@ -39,6 +39,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new uglify()
+        //new uglify()
     ]
 };

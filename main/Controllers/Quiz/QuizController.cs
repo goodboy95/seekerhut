@@ -34,8 +34,8 @@ namespace web.Controllers
             ViewBag.quizID = id;
             var quizResult = (JsonReturn)(qac.GetQuiz(id));
             var quizEntity = (QuizEntity)(quizResult.Data);
-            ViewBag.Title = quizEntity.QuizName;
-            ViewBag.Intro = quizEntity.QuizIntro;
+            ViewBag.Title = quizEntity.Name;
+            ViewBag.Intro = quizEntity.Intro;
             return View();
         }
     }

@@ -17,27 +17,7 @@ namespace web.Controllers
         }
 
         [Route("index/{pageNumStr?}")]
-        public IActionResult Index(string pageNumStr)
-        {
-            var userID = Convert.ToInt64(Request.Cookies["id"]);
-            int.TryParse(pageNumStr, out int pageNum);
-            if (pageNum < 1) { pageNum = 1; }
-            var blogListReturn = _blogApi.GetBlogList(userID, pageNum, 15);
-            if (blogListReturn.Code != 0) { return Redirect("/error/page404"); }
-            else
-            {
-                var blogListInfo = (JObject)blogListReturn.Data;
-                var blogListHtml = "";
-                foreach (var blogLink in blogListInfo["BlogList"])
-                {
-                    blogListHtml += $"<a href=../content/{blogLink["BlogID"]}>{blogLink["BlogTitle"]}</a><br />\n\t";
-                }
-                ViewBag.BlogNum = blogListInfo["BlogNum"].ToString();
-                ViewBag.PageNum = pageNum;
-                ViewBag.BlogList = blogListHtml;
-                return View();
-            }
-        }
+        public IActionResult Index(string pageNumStr) => View();
 
         [Route("writeblog")]
         public IActionResult WriteBlog() => View();

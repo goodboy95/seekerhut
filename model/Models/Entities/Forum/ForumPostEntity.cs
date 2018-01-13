@@ -5,7 +5,6 @@ namespace Domain.Entity
 {
     public class ForumPostEntity : BaseEntity
     {
-        public long ForumPostID { get; set; }
         public long ForumID { get; set; }
         public string Title { get; set; }
         public long AuthorID { get; set; }

@@ -80,7 +80,7 @@ namespace web.Api.Controllers
                 }
                 Response.Cookies.Append("username", username, new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
                 Response.Cookies.Append("token", u.Token, new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
-                Response.Cookies.Append("id", u.UserID.ToString(), new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
+                Response.Cookies.Append("id", u.ID.ToString(), new CookieOptions { Domain = domain, Expires = DateTime.Now.AddMonths(1) });
                 return JsonReturn.ReturnSuccess();
             }
         }

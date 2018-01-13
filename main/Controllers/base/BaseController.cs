@@ -43,7 +43,7 @@ namespace web.Controllers
         {
             userID = Request?.Cookies["id"] != null ? Convert.ToInt64(Request.Cookies["id"]) : 0;
             string token = Request.Cookies["token"];
-            var curUser = (from u in dbc.User where u.UserID == userID select new {u.Token, u.ExpireTime}).FirstOrDefault();
+            var curUser = (from u in dbc.User where u.ID == userID select new {u.Token, u.ExpireTime}).FirstOrDefault();
             string realToken = curUser?.Token;
             var tokenTime = curUser?.ExpireTime;
             if (wsa == null) { wsa = new WebSocketAccessor(context.HttpContext); }
@@ -63,7 +63,7 @@ namespace web.Controllers
         }
         public int GetAdminLevel()
         {
-            int adminLevel = (from user in dbc.User where user.UserID == userID select user.Admin).FirstOrDefault();
+            int adminLevel = (from user in dbc.User where user.ID == userID select user.Admin).FirstOrDefault();
             return adminLevel;
         }
     }

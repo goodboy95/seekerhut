@@ -4,16 +4,8 @@ using Newtonsoft.Json;
 
 namespace Domain.Entity
 {
-    public class UserEntity
+    public class UserEntity : BaseEntity
     {
-        public UserEntity()
-        {
-            UserCreateTime = DateTime.Now;
-            UserIsDeleted = false;
-        }
-        public long UserID { get; set; }
-        public DateTime UserCreateTime { get; set; }
-        public bool UserIsDeleted { get; set; }
         public string Name { get; set; }
         public string Pass { get; set; }
         public string Salt { get; set; }

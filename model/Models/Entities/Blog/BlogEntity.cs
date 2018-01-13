@@ -4,56 +4,48 @@ using Newtonsoft.Json;
 
 namespace Domain.Entity
 {
-    public class BlogEntity
+    public class BlogEntity : BaseEntity
     {
-        public BlogEntity()
+        public string Content { get; set; }
+        public string Title { get; set; }
+        public long AuthorID { get; set; }
+        public int Privacy { get; set; }
+        public int LikeNum { get; set; }
+        internal string _likeID { get; set; }
+        internal string _dislikeID { get; set; }
+        internal string _awardGoldInfo { get; set; }
+        internal string _visibleUserID { get; set; }
+        internal string _attachments { get; set; }
+        internal string _tags { get; set; }
+        public HashSet<long> LikeID
         {
-            BlogCreateTime = DateTime.Now;
-            BlogIsDeleted = false;
+            get{ return JsonConvert.DeserializeObject<HashSet<long>>(_likeID); }
+            set{ _likeID = JsonConvert.SerializeObject(value); }
         }
-        public long BlogID { get; set; }
-        public DateTime BlogCreateTime { get; set; }
-        public bool BlogIsDeleted { get; set; }
-        public string BlogContent { get; set; }
-        public string BlogTitle { get; set; }
-        public long BlogAuthorID { get; set; }
-        public int BlogPrivacy { get; set; }
-        public int BlogLikeNum { get; set; }
-        internal string _blogLikeID { get; set; }
-        internal string _blogDislikeID { get; set; }
-        internal string _blogAwardGoldInfo { get; set; }
-        internal string _blogVisibleUserID { get; set; }
-        internal string _blogAttachments { get; set; }
-        internal string _blogTags { get; set; }
-        public HashSet<long> BlogLikeID
+        public HashSet<long> DislikeID
         {
-            get{ return JsonConvert.DeserializeObject<HashSet<long>>(_blogLikeID); }
-            set{ _blogLikeID = JsonConvert.SerializeObject(value); }
+            get{ return JsonConvert.DeserializeObject<HashSet<long>>(_dislikeID); }
+            set{ _dislikeID = JsonConvert.SerializeObject(value); }
         }
-        public HashSet<long> BlogDislikeID
+        public Dictionary<long, int> AwardGoldInfo
         {
-            get{ return JsonConvert.DeserializeObject<HashSet<long>>(_blogDislikeID); }
-            set{ _blogDislikeID = JsonConvert.SerializeObject(value); }
+            get{ return JsonConvert.DeserializeObject<Dictionary<long, int>>(_awardGoldInfo); }
+            set{ _awardGoldInfo = JsonConvert.SerializeObject(value); }
         }
-        public Dictionary<long, int> BlogAwardGoldInfo
+        public List<FileMetaEntity> Attachments
         {
-            get{ return JsonConvert.DeserializeObject<Dictionary<long, int>>(_blogAwardGoldInfo); }
-            set{ _blogAwardGoldInfo = JsonConvert.SerializeObject(value); }
+            get{ return JsonConvert.DeserializeObject<List<FileMetaEntity>>(_attachments); }
+            set{ _attachments = JsonConvert.SerializeObject(value); }
         }
-        public List<FileMetaEntity> BlogAttachments
+        public List<long> VisibleUserID
         {
-            get{ return JsonConvert.DeserializeObject<List<FileMetaEntity>>(_blogAttachments); }
-            set{ _blogAttachments = JsonConvert.SerializeObject(value); }
+            get{ return JsonConvert.DeserializeObject<List<long>>(_visibleUserID); }
+            set{ _visibleUserID = JsonConvert.SerializeObject(value); }
         }
-        public List<long> BlogVisibleUserID
+        public HashSet<string> Tags
         {
-            get{ return JsonConvert.DeserializeObject<List<long>>(_blogVisibleUserID); }
-            set{ _blogVisibleUserID = JsonConvert.SerializeObject(value); }
-        }
-        public HashSet<string> BlogTags
-        {
-            get{ return JsonConvert.DeserializeObject<HashSet<string>>(_blogTags); }
-            set{ _blogTags = JsonConvert.SerializeObject(value); }
+            get{ return JsonConvert.DeserializeObject<HashSet<string>>(_tags); }
+            set{ _tags = JsonConvert.SerializeObject(value); }
         }
     }
 }

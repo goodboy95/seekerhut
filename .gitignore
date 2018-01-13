@@ -1,5 +1,6 @@
 /node_modules/
 /.vs/
 /.vscode/
-/main/wwwroot/lib/jquery/
-/main/wwwroot/js/
+/main/obj/
+/main/bin/
+/main/wwwroot/
