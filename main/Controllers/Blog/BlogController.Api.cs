@@ -29,8 +29,8 @@ namespace web.Api.Controllers
             var skipRows = (pageNo - 1) * pageSize;
             var userID = Convert.ToInt64(Request.Cookies["id"]);
             var blogList = dbc.Blog.Where(b => b.AuthorID == userID)
-                                .Join(dbc.User, b => b.AuthorID, u => u.ID, (b, u) => new { u.Name, b.Title })
-                                .AsEnumerable().Select(b => new JObject(){ ["author"] = b.Name, ["blog_title"] = b.Title });
+                                .Join(dbc.User, b => b.AuthorID, u => u.ID, (b, u) => new { b.ID, u.Name, b.Title })
+                                .AsEnumerable().Select(b => new JObject(){ ["id"] = b.ID, ["author"] = b.Name, ["blog_title"] = b.Title });
             var blogNum = blogList.Count();
             if (blogNum > skipRows || pageNo == 1) 
             {

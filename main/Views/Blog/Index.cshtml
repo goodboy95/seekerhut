@@ -4,7 +4,7 @@
 <script src="~/lib/jscookie.js"></script>
 <script src="~/js/blog/blog.js"></script>
 <title>探索日志</title>
-<div id="blogList">
-	
+<div id="blogArea">
+	<a v-for="blog in bloglist" :href="blog/content/blog.id">{{blog.blog_title}}</a>
 </div>
 <div id="pageBar"></div>
