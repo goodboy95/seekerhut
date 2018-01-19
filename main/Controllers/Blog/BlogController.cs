@@ -32,10 +32,10 @@ namespace web.Controllers
             {
                 var blogInfo = (JObject)blogReturn.Data;
                 ViewBag.BlogID = id;
-                ViewBag.AuthorID = blogInfo["BlogAuthorID"].ToString();
-                ViewBag.BlogTitle = blogInfo["BlogTitle"].ToString();
+                ViewBag.AuthorID = blogInfo["AuthorID"].ToString();
+                ViewBag.BlogTitle = blogInfo["Title"].ToString();
                 ViewBag.BlogAuthor = blogInfo["AuthorName"].ToString();
-                ViewBag.BlogContent = blogInfo["BlogContent"].ToString();
+                ViewBag.BlogContent = blogInfo["Content"].ToString();
                 ViewBag.CreateTime = blogInfo["CreateTimeStr"].ToString();
                 return View();
             }

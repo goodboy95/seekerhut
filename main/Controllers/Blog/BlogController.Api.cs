@@ -24,13 +24,12 @@ namespace web.Api.Controllers
         }
 
         [HttpGet("blog_list")]
-        public JsonReturn GetBlogList([FromQuery]int pageNo, [FromQuery]int pageSize)
+        public JsonReturn GetBlogList(long userID, int pageNo, int pageSize)
         {
             var skipRows = (pageNo - 1) * pageSize;
-            var userID = Convert.ToInt64(Request.Cookies["id"]);
+            userID = userID > 0 ? userID : Convert.ToInt64(Request.Cookies["id"]);
             var blogList = dbc.Blog.Where(b => b.AuthorID == userID)
-                                .Join(dbc.User, b => b.AuthorID, u => u.ID, (b, u) => new { b.ID, u.Name, b.Title })
-                                .AsEnumerable().Select(b => new JObject(){ ["id"] = b.ID, ["author"] = b.Name, ["blog_title"] = b.Title });
+                            .Join(dbc.User, b => b.AuthorID, u => u.ID, (b, u) => new { id = b.ID, title = b.Title, create_time = b.CreateTime.ToString("yyyy-MM-dd hh:mm:ss") });
             var blogNum = blogList.Count();
             if (blogNum > skipRows || pageNo == 1) 
             {
@@ -42,7 +41,7 @@ namespace web.Api.Controllers
         }
 
         [HttpGet("blog")]
-        public JsonReturn GetBlog([FromQuery]long id)
+        public JsonReturn GetBlog(long id)
         {
             var blog = dbc.Blog.Find(id);
             if (blog == null) { return JsonReturn.ReturnFail("该日志不存在！"); }
@@ -63,7 +62,7 @@ namespace web.Api.Controllers
         }
         
         [HttpPost("blog")]
-        public JsonReturn SaveBlog([FromForm]long id, [FromForm]string title, [FromForm]string content, [FromForm]int privacy, [FromForm]HashSet<string> tags)
+        public JsonReturn SaveBlog(long id, string title, string content, int privacy, HashSet<string> tags)
         {
             if (title == null || content == null)
             {

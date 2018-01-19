@@ -11,7 +11,14 @@ var routes = [
         components: require('./templates/index.vue'),
         children: [
             { path: 'blog-manage', components: require('./templates/bloglist.vue') },
-            { path: 'blog-recov',components: require('./templates/xb.vue') }
+            { 
+                path: 'reply-manage', 
+                components: require('./templates/reply.vue'),
+                children: [
+                    { path: 'myreply', components: require('./templates/myreply.vue') }
+                ]
+            },
+            { path: 'blog-recov',components: require('./templates/blogrecov.vue') }
         ]
     },
 ];

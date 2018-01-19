@@ -13,6 +13,7 @@
                 <a href="javascript:;">探索日志</a>
                 <dl class="layui-nav-child">
                     <dd><router-link to="/blog-manage">日志管理</router-link></dd>
+                    <dd><router-link to="/reply-manage">回复管理</router-link></dd>
                     <dd><router-link to="/blog-recov">自删日志恢复</router-link></dd>
                 </dl>
             </li>
