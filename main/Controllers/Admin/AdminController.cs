@@ -12,8 +12,11 @@ namespace web.Controllers
         {
             //_blogApi = new BlogApiController(dbc, logFac, svp);
         }
-
-        [Route("manage_me")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("manage_me")]
         public IActionResult ManageMe()
         {
             return View();

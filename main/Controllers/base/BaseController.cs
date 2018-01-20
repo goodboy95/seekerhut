@@ -27,8 +27,6 @@ namespace web.Controllers
             _log = logFac.CreateLogger("seekerhut");
             //redis = StackRedisHelper.Instance;
         }
-
-
         public string GetIPAddr()
         {
             var ip = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();

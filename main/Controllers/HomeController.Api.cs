@@ -33,6 +33,12 @@ namespace web.Api.Controllers
             }
             return passHash;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public JsonReturn Register(string username, string password)
         {
@@ -47,6 +53,12 @@ namespace web.Api.Controllers
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public JsonReturn Login(string username, string password)
         {

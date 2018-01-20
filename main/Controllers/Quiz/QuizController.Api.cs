@@ -155,13 +155,5 @@ namespace web.Api.Controllers
                 QuizName = ql.Name, QuizBody = ql.Body };
             return JsonReturn.ReturnSuccess(answerList);
         }
-
-        [HttpGet("test")]
-        public ActionResult Test()
-        {
-            var x = new JObject();
-            x["12"] = 5;
-            return JsonReturn.ReturnSuccess(x);
-        }
     }
 }

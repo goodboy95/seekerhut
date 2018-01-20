@@ -15,12 +15,25 @@ namespace web.Api.Controllers
         public ForumController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("forumList")]
         public JsonReturn GetForumList(int pageNo = 0, int pageSize = 0)
         {
             var forumList = from fl in dbc.Forum select fl;
             return JsonReturn.ReturnSuccess(new { forumList = forumList });
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="forumId"></param>
+        /// <param name="pageNo"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("postList")]
         public JsonReturn GetPostList(int forumId, int pageNo, int pageSize)
         {
@@ -36,6 +49,13 @@ namespace web.Api.Controllers
                 return JsonReturn.ReturnFail("页码超出范围！");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="pageNo"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("postContent")]
         public JsonReturn GetPostContent(int postId, int pageNo, int pageSize)
         {
@@ -52,6 +72,13 @@ namespace web.Api.Controllers
                 return JsonReturn.ReturnFail("页码超出范围！");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="forumId"></param>
+        /// <param name="title"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
         [HttpPost("sendpost")]
         public JsonReturn SendPost(int forumId, string title, string content)
         {

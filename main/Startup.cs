@@ -11,6 +11,7 @@ using Dao;
 using Middleware;
 using Utils;
 using System.IO;
+using Swashbuckle.AspNetCore.Swagger;
 using Pomelo.EntityFrameworkCore.MySql;
 using StackExchange.Redis;
 using System;
@@ -38,12 +39,17 @@ namespace web
             services.AddMvc(options => {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "seekerhut API", Version = "0.3" });
+                c.IncludeXmlComments(AppContext.BaseDirectory + "/apis.xml");
+            });
             services.AddDbContext<DwDbContext>(options => options.UseMySql(Configuration.GetConnectionString("mysql")));
             //services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DwDbContext c)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DwDbContext dbc)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -52,6 +58,11 @@ namespace web
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => 
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "seekerhut API");
+                });
             }
             else
             {
@@ -74,7 +85,7 @@ namespace web
             });
             
             app.UseStaticFiles();
-            Initialize.DbInit(c);
+            Initialize.DbInit(dbc);
             //app.UseErrorPage();
             app.UseMvc(routes =>
             {

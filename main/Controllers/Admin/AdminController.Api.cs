@@ -11,7 +11,12 @@ namespace web.Api.Controllers
     public class AdminApiController : ApiBaseController
     {
         public AdminApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp){}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("my_blog_list")]
         public JsonReturn MyBlogList(int pageNo, int pageSize)
         {
@@ -28,7 +33,12 @@ namespace web.Api.Controllers
             }
             else{ return JsonReturn.ReturnFail("页码超出范围！"); }
         } 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageNo"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("my_blog_reply_list")]
         public JsonReturn MyBlogReplyList(int pageNo, int pageSize)
         {

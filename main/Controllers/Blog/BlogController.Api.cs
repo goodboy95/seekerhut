@@ -22,7 +22,13 @@ namespace web.Api.Controllers
             if (dt.Date < DateTime.Today.Date) { return dt.ToString("yyyy-MM-dd"); }
             else { return dt.ToString("HH:mm"); }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="pageNo"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("blog_list")]
         public JsonReturn GetBlogList(long userID, int pageNo, int pageSize)
         {
@@ -39,7 +45,11 @@ namespace web.Api.Controllers
             }
             else{ return JsonReturn.ReturnFail("页码超出范围！"); }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("blog")]
         public JsonReturn GetBlog(long id)
         {
@@ -60,7 +70,15 @@ namespace web.Api.Controllers
             if (blogInfo["AuthorName"] == null) { blogInfo["AuthorName"] = "幽灵用户"; }
             return JsonReturn.ReturnSuccess(blogInfo);
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="title"></param>
+        /// <param name="content"></param>
+        /// <param name="privacy"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
         [HttpPost("blog")]
         public JsonReturn SaveBlog(long id, string title, string content, int privacy, HashSet<string> tags)
         {
@@ -93,7 +111,11 @@ namespace web.Api.Controllers
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="picId"></param>
+        /// <returns></returns>
         [HttpGet("Pic")]
         public JsonReturn Pic([FromQuery]int picId)
         {
@@ -101,14 +123,23 @@ namespace web.Api.Controllers
             if (pic == null) { return JsonReturn.ReturnFail("图片id不存在！"); }
             return JsonReturn.ReturnSuccess(new JObject(){["PicPath"] = pic.Path});
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("tagList")]
         public JsonReturn GetTagList([FromQuery]long userId)
         {
             var tagList = from t in dbc.BlogTagRelation where t.UserID == userId select new{tagName = t.TagName};
             return JsonReturn.ReturnSuccess(tagList);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         [HttpGet("blogsByTag")]
         public JsonReturn GetBlogsByTag([FromQuery]string tagName, [FromQuery]long userID)
         {
@@ -116,7 +147,13 @@ namespace web.Api.Controllers
             if (blogList == null) { blogList = new List<long>(); }
             return JsonReturn.ReturnSuccess(blogList);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="blogID"></param>
+        /// <param name="pageNo"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("replyList")]
         public JsonReturn GetReply([FromQuery]long blogID, [FromQuery]int pageNo, [FromQuery]int pageSize)
         {
@@ -138,7 +175,14 @@ namespace web.Api.Controllers
                 return JsonReturn.ReturnFail("页码超出范围！");
             }
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="blogAuthorID"></param>
+        /// <param name="blogID"></param>
+        /// <param name="content"></param>
+        /// <param name="fatherID"></param>
+        /// <returns></returns>
         [HttpPost("reply")]
         public JsonReturn SaveReply([FromForm]long blogAuthorID, [FromForm]long blogID, [FromForm]string content, [FromForm]long fatherID)
         {
