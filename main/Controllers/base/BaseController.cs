@@ -27,15 +27,6 @@ namespace web.Controllers
             _log = logFac.CreateLogger("seekerhut");
             //redis = StackRedisHelper.Instance;
         }
-        public string GetIPAddr()
-        {
-            var ip = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-            if (string.IsNullOrEmpty(ip))
-            {
-                ip = HttpContext.Connection.RemoteIpAddress.ToString();
-            }
-            return ip;
-        }
         protected virtual void LoginFail(ActionExecutingContext context) {}
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -58,11 +49,6 @@ namespace web.Controllers
         }
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-        }
-        public int GetAdminLevel()
-        {
-            int adminLevel = (from user in dbc.User where user.ID == userID select user.Admin).FirstOrDefault();
-            return adminLevel;
         }
     }
 }

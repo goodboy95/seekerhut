@@ -14,6 +14,7 @@ using Domain.Entity;
 
 namespace web.Controllers
 {
+    [Route("quiz")]
     public class QuizController : ViewBaseController
     {
         private readonly QuizApiController qac;
@@ -21,14 +22,19 @@ namespace web.Controllers
         { 
             qac = new QuizApiController(dbc, logFac, svp);
         }
+        [HttpGet("index")]
         public IActionResult Index() => View();
+        [HttpGet("quizmanage")]
         public IActionResult QuizManage() => View();
+        [HttpGet("answerview")]
         public IActionResult AnswerView() => View();
+        [HttpGet("createquiz")]
         public IActionResult CreateQuiz([FromRoute]int id)
         {
             ViewBag.quesGroupId = id;
             return View();
         }
+        [HttpGet("quizpage")]
         public IActionResult QuizPage([FromRoute]int id)
         {
             ViewBag.quizID = id;

@@ -88,7 +88,7 @@
             <param name="fatherID"></param>
             <returns></returns>
         </member>
-        <member name="M:web.Api.Controllers.ForumController.GetForumList(System.Int32,System.Int32)">
+        <member name="M:web.Api.Controllers.ForumApiController.GetForumList(System.Int32,System.Int32)">
             <summary>
             
             </summary>
@@ -96,7 +96,7 @@
             <param name="pageSize"></param>
             <returns></returns>
         </member>
-        <member name="M:web.Api.Controllers.ForumController.GetPostList(System.Int32,System.Int32,System.Int32)">
+        <member name="M:web.Api.Controllers.ForumApiController.GetPostList(System.Int32,System.Int32,System.Int32)">
             <summary>
             
             </summary>
@@ -105,7 +105,7 @@
             <param name="pageSize"></param>
             <returns></returns>
         </member>
-        <member name="M:web.Api.Controllers.ForumController.GetPostContent(System.Int32,System.Int32,System.Int32)">
+        <member name="M:web.Api.Controllers.ForumApiController.GetPostContent(System.Int32,System.Int32,System.Int32)">
             <summary>
             
             </summary>
@@ -114,7 +114,7 @@
             <param name="pageSize"></param>
             <returns></returns>
         </member>
-        <member name="M:web.Api.Controllers.ForumController.SendPost(System.Int32,System.String,System.String)">
+        <member name="M:web.Api.Controllers.ForumApiController.SendPost(System.Int32,System.String,System.String)">
             <summary>
             
             </summary>
@@ -184,12 +184,6 @@
             <returns></returns>
         </member>
         <member name="M:web.Api.Controllers.QuizApiController.GetAnswerList">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:web.Controllers.AdminController.ManageMe">
             <summary>
             
             </summary>

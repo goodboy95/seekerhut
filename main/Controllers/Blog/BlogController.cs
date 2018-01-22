@@ -7,7 +7,7 @@ using System;
 
 namespace web.Controllers
 {
-    [Route("[controller]")]
+    [Route("blog")]
     public class BlogController : ViewBaseController
     {
         private readonly BlogApiController _blogApi;
@@ -16,13 +16,13 @@ namespace web.Controllers
             _blogApi = new BlogApiController(dbc, logFac, svp);
         }
 
-        [Route("index/{pageNumStr?}")]
+        [HttpGet("index/{pageNumStr?}")]
         public IActionResult Index(string pageNumStr) => View();
 
-        [Route("writeblog")]
+        [HttpGet("writeblog")]
         public IActionResult WriteBlog() => View();
 
-        [Route("content/{id}")]
+        [HttpGet("content/{id}")]
         public IActionResult BlogContent(string id)
         {            
             var isIdNum = long.TryParse(id, out long blogId);

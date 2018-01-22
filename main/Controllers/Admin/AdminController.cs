@@ -5,21 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace web.Controllers
 {
-    [Route("[controller]")]
+    [Route("admin")]
     public class AdminController : ViewBaseController
     {
         public AdminController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
             //_blogApi = new BlogApiController(dbc, logFac, svp);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+
         [HttpGet("manage_me")]
-        public IActionResult ManageMe()
-        {
-            return View();
-        }
+        public IActionResult ManageMe() => View();
     }
 }

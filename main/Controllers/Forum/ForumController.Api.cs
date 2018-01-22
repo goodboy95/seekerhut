@@ -9,10 +9,10 @@ using System;
 
 namespace web.Api.Controllers
 {
-    [Route("api/[controller]")]
-    public class ForumController : ApiBaseController
+    [Route("api/forum")]
+    public class ForumApiController : ApiBaseController
     {
-        public ForumController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
+        public ForumApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
         /// <summary>

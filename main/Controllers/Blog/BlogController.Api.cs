@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace web.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/blog")]
     public class BlogApiController : ApiBaseController
     {       
         public BlogApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp){}

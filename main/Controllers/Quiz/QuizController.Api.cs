@@ -16,7 +16,7 @@ using System.Web;
 
 namespace web.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/quiz")]
     public class QuizApiController : ApiBaseController
     {
         public QuizApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)

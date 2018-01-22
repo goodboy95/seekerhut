@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace web.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/home")]
     public class HomeApiController : ApiBaseController
     {
         public HomeApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
@@ -22,7 +22,7 @@ namespace web.Api.Controllers
         protected override void LoginFail(ActionExecutingContext context)
         {
         }
-        public string HashStr(string src)
+        private string HashStr(string src)
         {
             var sha2 = SHA256.Create();
             byte[] hashByte = sha2.ComputeHash(Encoding.Unicode.GetBytes(src));

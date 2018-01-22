@@ -7,7 +7,7 @@ using Utils;
 
 namespace web.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/admin")]
     public class AdminApiController : ApiBaseController
     {
         public AdminApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp){}
