@@ -13,6 +13,7 @@ module.exports = {
         jquery: 'jQuery',
         layui: 'layui',
         vue: 'Vue',
+        cookies: 'Cookies',
         //vuerouter: 'vue-router'
     },
     resolve: {

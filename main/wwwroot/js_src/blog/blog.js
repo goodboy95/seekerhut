@@ -1,6 +1,7 @@
 var axios = require('axios');
 var layui = require('layui');
 var Vue = require('vue');
+var Cookies = require('cookies');
 
 window.onload = function(){
     //SocketConnect(close, SocketReceive, error);
@@ -8,7 +9,7 @@ window.onload = function(){
     document.getElementById('menu-myblog').classList.add('layui-this');
     layui.use('laypage', function(){
         var laypage = layui.laypage;
-        axios.get('/blogapi/blog_list/', { params: { pageNo: 1, pageSize: 15 } }).then(function(resp){
+        axios.get('/api/blog/blog_list/', { params: { authorId: Cookies.get('id'), pageNo: 1, pageSize: 15 } }).then(function(resp){
             bloglist = resp.data.data.blogList;
             new Vue({
                 el: '#blogArea',

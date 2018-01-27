@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace web.Controllers
 {
-    [Route("home")]
     public class HomeController : ViewBaseController
     {
         public HomeController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
@@ -19,15 +18,12 @@ namespace web.Controllers
         {
 
         }
-        [HttpGet("index")]
         public IActionResult Index() 
         {
             ViewBag.CurIP = new HttpParser(HttpContext).GetIPAddr();
             return View();
         } 
-        [HttpGet("test")]
         public IActionResult Test() => View();
-        [HttpGet("logout")]
         public IActionResult Logout()
         {
             var domain = new HttpParser(HttpContext).GetDomain();
