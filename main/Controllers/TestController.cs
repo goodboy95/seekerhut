@@ -1,15 +1,15 @@
-/*using System;
->>>>>>> fc07a9aca2a5775c991981f86b34ee6ac8751904
+using System;
 using Dao;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using JiebaNet.Analyser;
-using JiebaNet.Segmenter.PosSeg;
-using JiebaNet.Segmenter;
+//using JiebaNet.Analyser;
+//using JiebaNet.Segmenter.PosSeg;
+//using JiebaNet.Segmenter;
 using Utils;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Diagnostics;
 
 namespace web.Api.Controllers
 {
@@ -20,14 +20,14 @@ namespace web.Api.Controllers
         {
         }
         protected override void LoginFail(ActionExecutingContext context) { }
-        [HttpGet("jieba-test")]
-        public ActionResult JiebaTest(string sentence)
-        {
-            var s = new JiebaSegmenter();
-            var resArr = s.Cut(sentence);
-            var res = string.Join(",", resArr);
-            return JsonReturn.ReturnSuccess(res);
-        }
+        // [HttpGet("jieba-test")]
+        // public ActionResult JiebaTest(string sentence)
+        // {
+        //     var s = new JiebaSegmenter();
+        //     var resArr = s.Cut(sentence);
+        //     var res = string.Join(",", resArr);
+        //     return JsonReturn.ReturnSuccess(res);
+        // }
         [HttpGet("emit-test")]
         public ActionResult EmitTest()
         {
@@ -43,5 +43,21 @@ namespace web.Api.Controllers
             ilOfSayHello.Emit(OpCodes.Ret);
             return JsonReturn.ReturnSuccess("");
         }
+        [HttpGet("run_shell")]
+        public ActionResult RunShell(string filePath, string arguments)
+        {
+            var p = new Process();
+            p.StartInfo.FileName = filePath;
+            p.StartInfo.Arguments = arguments;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            p.WaitForExit();
+            p.Close();
+            return JsonReturn.ReturnSuccess("ok");
+        }
     }
-}*/
+}
