@@ -21,7 +21,7 @@ layui.use('layer', function(){
             });
         };
         document.getElementById('regSubmit').onclick = function(){
-            $.post('/homeapi/register/', {
+            $.post('/api/home/register/', {
                 __RequestVerificationToken: $('#reg').find('#token').find('input').val(),
                 username: $('#reg').find('#reg-username').val(),
                 password: md5($('#reg').find('#reg-password').val())
@@ -36,7 +36,7 @@ layui.use('layer', function(){
             });
         };
         document.getElementById('loginSubmit').onclick = function(){
-            $.post('/homeapi/login/', {
+            $.post('/api/home/login/', {
                 __RequestVerificationToken: $('#login').find('#token').find('input').val(),
                 username: $('#login').find('#login-username').val(),
                 password: md5($('#login').find('#login-password').val())

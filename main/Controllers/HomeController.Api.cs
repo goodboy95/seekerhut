@@ -19,9 +19,7 @@ namespace web.Api.Controllers
         public HomeApiController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)
         {
         }
-        protected override void LoginFail(ActionExecutingContext context)
-        {
-        }
+        protected override void LoginFail(ActionExecutingContext context) { }
         private string HashStr(string src)
         {
             var sha2 = SHA256.Create();
