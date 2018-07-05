@@ -57,7 +57,7 @@ namespace web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => 
                 {
