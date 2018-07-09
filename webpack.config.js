@@ -14,7 +14,7 @@ module.exports = {
         layui: 'layui',
         vue: 'Vue',
         cookies: 'Cookies',
-        //vuerouter: 'vue-router'
+        vuerouter: 'vue-router'
     },
     resolve: {
         alias: {
@@ -23,7 +23,7 @@ module.exports = {
         }
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.html$/,
                 loader: 'html-loader'

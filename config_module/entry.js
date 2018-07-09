@@ -3,7 +3,7 @@ var path = require('path');
 var entryPath = [
     'index.js',
     'blog/base.js', 'blog/blog.js', 'blog/content.js', 'blog/writeblog.js',
-    'forum/index.js', 'forum/postinfo.js', 'forum/postlist.js',
+    'forum/index.js',/* 'forum/postinfo.js',*/ 'forum/postlist.js',
     'quiz/create_quiz.js', 'quiz/index.js', 'quiz/quiz.js', 'quiz/headerMenu.js', 'quiz/answer_view.js', 'quiz/quiz_manage.js',
     'admin/manage_me.js'
     /* '/admin/me_manage.js', '/admin/system_manage.js' */

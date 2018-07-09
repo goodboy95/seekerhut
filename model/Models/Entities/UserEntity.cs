@@ -17,11 +17,11 @@ namespace Domain.Entity
         public int Exp { get; set; }
         public int Gold { get; set; }
         public int NoticeNum { get; set; }
-        internal string _loginIP { get; set; }
-        public Dictionary<string, bool> LoginIP 
-        { 
-            get { return JsonConvert.DeserializeObject<Dictionary<string, bool>>(_loginIP); } 
-            set { _loginIP = JsonConvert.SerializeObject(value); } 
-        }
+        //internal string _loginIP { get; set; }
+        public JsonObject<Dictionary<string, bool>> LoginIP;
+        // { 
+        //     get { return JsonConvert.DeserializeObject<Dictionary<string, bool>>(_loginIP); } 
+        //     set { _loginIP = JsonConvert.SerializeObject(value); } 
+        // }
     }
 }

@@ -28,9 +28,9 @@ namespace Domain.Mapping
             entity.Property(p => p.Gold).HasColumnName("gold");
             entity.Property(p => p.Exp).HasColumnName("exp");
             entity.Property(p => p.NoticeNum).HasColumnName("notice_num");
-            entity.Property(p => p._loginIP).HasColumnName("login_ip").HasColumnType("varchar(40)");
+            entity.Property(p => p.LoginIP).HasColumnName("login_ip").HasColumnType("json");
             entity.HasIndex(p => p.Name).IsUnique();
-            entity.Ignore(p => p.LoginIP);
+            //entity.Ignore(p => p.LoginIP);
         }
     }
 }

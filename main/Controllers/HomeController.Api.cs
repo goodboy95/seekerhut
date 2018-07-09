@@ -77,7 +77,7 @@ namespace web.Api.Controllers
                     dbc.SaveChanges();
                 }
                 string ip = new HttpParser(HttpContext).GetIPAddr();
-                var loginIpDic = u.LoginIP;
+                var loginIpDic = u.LoginIP.Object;
                 if (!loginIpDic.ContainsKey(ip) || loginIpDic[ip] == false)
                 {
                     if (!loginIpDic.ContainsKey(ip))
