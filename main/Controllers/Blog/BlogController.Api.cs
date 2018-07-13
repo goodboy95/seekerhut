@@ -59,7 +59,7 @@ namespace web.Api.Controllers
                 return JsonReturn.ReturnFail("你无权访问该日志！");
             else if ((blog.Privacy & 0b01) != 0)
             {
-                var visibleIds = blog.VisibleUserID;
+                var visibleIds = blog.VisibleUserID.Object;
                 if (visibleIds.IndexOf(userID) == -1)
                     return JsonReturn.ReturnFail("你无权访问该日志！");
             }
@@ -101,7 +101,7 @@ namespace web.Api.Controllers
                 {
                     tagUser = new BlogTagRelationEntity{TagName = i, UserID = userID, BlogIDList = new List<long>()};
                 }
-                var tmpBlogIDList = tagUser.BlogIDList;
+                var tmpBlogIDList = tagUser.BlogIDList.Object;
                 tmpBlogIDList.Add(blog.ID);
                 tagUser.BlogIDList = tmpBlogIDList;
                 if (tagUser.ID == 0) { dbc.BlogTagRelation.Add(tagUser); }

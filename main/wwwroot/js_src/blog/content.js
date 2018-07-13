@@ -24,7 +24,7 @@ window.onload = function(){
         flow.load({
             elem: '#replyList',
             done: function(page, next){
-                $.get('/blogapi/replylist/', {blogID: id, pageNo: page, pageSize: 5}, function(resp){
+                $.get('/api/blog/replylist/', {blogID: id, pageNo: page, pageSize: 5}, function(resp){
                     if (parseInt(resp.code) === 0) { 
                         replyNum = resp.data.ReplyNum;
                         var replyList = resp.data.ReplyList;
@@ -47,7 +47,7 @@ window.onload = function(){
         var replyContent = layedit.getContent(contentBox);
         var userName = Cookies.get('username');
         var authorID = document.getElementById('authorID').innerHTML;
-        $.post('/blogapi/reply/', {
+        $.post('/api/blog/reply/', {
             blogAuthorID: authorID,
             blogID: id,
             content: replyContent,

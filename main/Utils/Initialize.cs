@@ -9,8 +9,8 @@ namespace Utils
     {
         public static void DbInit(DwDbContext c)
         {
-            c.Database.EnsureCreated();
             //c.Database.Migrate();
+            c.Database.EnsureCreated();
             if (!c.CommonConfig.Any())
             {
                 c.CommonConfig.Add(new CommonConfigEntity{Item = "BlogPageSize", Value = "20"});

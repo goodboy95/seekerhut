@@ -21,10 +21,9 @@ namespace Domain.Mapping
             entity.Property(p => p.AuthorID).HasColumnName("author_id").IsRequired();
             entity.Property(p => p.Content).HasColumnName("content").IsRequired();
             entity.Property(p => p.FatherID).HasColumnName("father_id").IsRequired();
-            entity.Property(p => p._likeID).HasColumnName("like_id").IsRequired();
+            entity.Property(p => p.LikeID).HasColumnName("like_id").IsRequired();
             entity.HasIndex(p => p.BlogID);
             entity.HasIndex(p => p.AuthorID);
-            entity.Ignore(p => p.LikeID);
         }
     }
 }

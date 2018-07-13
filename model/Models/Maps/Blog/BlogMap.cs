@@ -21,19 +21,13 @@ namespace Domain.Mapping
             entity.Property(p => p.Privacy).HasColumnName("privacy").IsRequired();
             entity.Property(p => p.LikeNum).HasColumnName("like_num").IsRequired();
             entity.Property(p => p.Content).HasColumnName("content").IsRequired();
-            entity.Property(p => p._likeID).HasColumnName("like_id").IsRequired();
-            entity.Property(p => p._dislikeID).HasColumnName("dislike_id").IsRequired();
-            entity.Property(p => p._awardGoldInfo).HasColumnName("award_gold_info").IsRequired();
-            entity.Property(p => p._visibleUserID).HasColumnName("visible_userid").IsRequired();
-            entity.Property(p => p._tags).HasColumnName("tags").IsRequired();
-            entity.Property(p => p._attachments).HasColumnName("attachments").IsRequired();
+            entity.Property(p => p.LikeID).HasColumnName("like_id").IsRequired();
+            entity.Property(p => p.DislikeID).HasColumnName("dislike_id").IsRequired();
+            entity.Property(p => p.AwardGoldInfo).HasColumnName("award_gold_info").IsRequired();
+            entity.Property(p => p.VisibleUserID).HasColumnName("visible_userid").IsRequired();
+            entity.Property(p => p.Tags).HasColumnName("tags").IsRequired();
+            entity.Property(p => p.Attachments).HasColumnName("attachments").IsRequired();
             entity.HasIndex(p => p.AuthorID);
-            entity.Ignore(p => p.VisibleUserID);
-            entity.Ignore(p => p.Tags);
-            entity.Ignore(p => p.LikeID);
-            entity.Ignore(p => p.DislikeID);
-            entity.Ignore(p => p.AwardGoldInfo);
-            entity.Ignore(p => p.Attachments);
         }
     }
 }

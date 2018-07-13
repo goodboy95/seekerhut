@@ -21,8 +21,7 @@ namespace Domain.Mapping
             entity.Property(p => p.Intro).HasColumnName("intro").HasColumnType("varchar(255)");
             entity.Property(p => p.PicPath).HasColumnName("picpath");
             entity.Property(p => p.Body).HasColumnName("body").IsRequired();
-            entity.Property(p => p._likes).HasColumnName("likes").IsRequired();
-            entity.Ignore(p => p.Likes);
+            entity.Property(p => p.Likes).HasColumnName("likes").IsRequired();
         }
     }
 }

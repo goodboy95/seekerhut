@@ -19,7 +19,7 @@ window.onload = function(){
         var layer = layui.layer;
         contentBox = layedit.build('content');
 
-        $.get('/blogapi/tagList/', {userId: Cookies.get('id')}, function(resp){
+        $.get('/api/blog/blog_list/', {userId: Cookies.get('id')}, function(resp){
             if (resp.code === 0){
                 var tagList = resp.data.tagList;
                 for (var i = 0; i < tagList.length; i++){
@@ -62,7 +62,7 @@ window.onload = function(){
         };
         
         document.getElementById('submit').onclick = function(){
-            $.post('/blogapi/blog/', {
+            $.post('/api/blog/blog/', {
                 title: document.getElementById('title').value,
                 content: layedit.getContent(contentBox),
                 tags: tagArr,

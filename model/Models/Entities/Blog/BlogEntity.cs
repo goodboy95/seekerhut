@@ -11,41 +11,11 @@ namespace Domain.Entity
         public long AuthorID { get; set; }
         public int Privacy { get; set; }
         public int LikeNum { get; set; }
-        internal string _likeID { get; set; }
-        internal string _dislikeID { get; set; }
-        internal string _awardGoldInfo { get; set; }
-        internal string _visibleUserID { get; set; }
-        internal string _attachments { get; set; }
-        internal string _tags { get; set; }
-        public HashSet<long> LikeID
-        {
-            get{ return JsonConvert.DeserializeObject<HashSet<long>>(_likeID); }
-            set{ _likeID = JsonConvert.SerializeObject(value); }
-        }
-        public HashSet<long> DislikeID
-        {
-            get{ return JsonConvert.DeserializeObject<HashSet<long>>(_dislikeID); }
-            set{ _dislikeID = JsonConvert.SerializeObject(value); }
-        }
-        public Dictionary<long, int> AwardGoldInfo
-        {
-            get{ return JsonConvert.DeserializeObject<Dictionary<long, int>>(_awardGoldInfo); }
-            set{ _awardGoldInfo = JsonConvert.SerializeObject(value); }
-        }
-        public List<FileMetaEntity> Attachments
-        {
-            get{ return JsonConvert.DeserializeObject<List<FileMetaEntity>>(_attachments); }
-            set{ _attachments = JsonConvert.SerializeObject(value); }
-        }
-        public List<long> VisibleUserID
-        {
-            get{ return JsonConvert.DeserializeObject<List<long>>(_visibleUserID); }
-            set{ _visibleUserID = JsonConvert.SerializeObject(value); }
-        }
-        public HashSet<string> Tags
-        {
-            get{ return JsonConvert.DeserializeObject<HashSet<string>>(_tags); }
-            set{ _tags = JsonConvert.SerializeObject(value); }
-        }
+        public JsonObject<HashSet<long>> LikeID { get; set; }
+        public JsonObject<HashSet<long>> DislikeID { get; set; }
+        public JsonObject<Dictionary<long, int>> AwardGoldInfo { get; set; }
+        public JsonObject<List<long>> VisibleUserID { get; set; }
+        public JsonObject<List<FileMetaEntity>> Attachments { get; set; }
+        public JsonObject<HashSet<string>> Tags { get; set; }
     }
 }
