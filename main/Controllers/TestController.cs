@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using System.IO.Compression;
+using System.Text;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace web.Api.Controllers
 {
@@ -58,6 +63,29 @@ namespace web.Api.Controllers
             p.WaitForExit();
             p.Close();
             return JsonReturn.ReturnSuccess("ok");
+        }
+
+        [HttpPost("zip_upload")]
+        [IgnoreAntiforgeryToken]
+        [RequestSizeLimit(100000000)]
+        public ActionResult ZipUpload([FromForm]IFormFile file)
+        {
+            var arc = new ZipArchive(file.OpenReadStream(), ZipArchiveMode.Read, false, Encoding.GetEncoding(65001));
+            var ct = 0;
+            foreach (var entry in arc.Entries)
+            {
+                ct++;
+                var stream = entry.Open();
+                var fileName = entry.FullName;
+                var sr = new StreamReader(stream);
+                var cont = sr.ReadToEnd();
+                var j = JArray.Parse(cont);
+                sr.Dispose();
+                stream.Dispose();
+                Console.WriteLine(ct);
+            }
+            arc.Dispose();
+            return JsonReturn.ReturnSuccess();
         }
     }
 }

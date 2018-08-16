@@ -15,7 +15,7 @@
     <PackageReference Include="Grpc.Core" Version="1.11.0-pre1" />
     <!--<PackageReference Include="StackExchange.Redis" Version="1.2.6" />-->
     <!--<PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.0.0" />-->
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
     <ProjectReference Include="..\model\model.csproj" />
     <ProjectReference Include="..\utility\utility.csproj" />
     <ProjectReference Include="..\jieba.NET\Analyser\Analyser.csproj" />

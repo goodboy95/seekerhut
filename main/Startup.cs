@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Pomelo.EntityFrameworkCore.MySql;
 using StackExchange.Redis;
 using System;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace web
 {
