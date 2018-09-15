@@ -7,7 +7,7 @@ using System;
 
 namespace web.Controllers
 {
-    [Route("blog")]
+    [Route("page/blog")]
     public class BlogController : ViewBaseController
     {
         private readonly BlogApiController _blogApi;

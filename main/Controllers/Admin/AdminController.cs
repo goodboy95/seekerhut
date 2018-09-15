@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace web.Controllers
 {
-    [Route("admin")]
+    [Route("page/admin")]
     public class AdminController : ViewBaseController
     {
         public AdminController(DwDbContext dbc, ILoggerFactory logFac, IServiceProvider svp) : base(dbc, logFac, svp)

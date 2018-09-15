@@ -14,6 +14,7 @@ using Domain.Entity;
 
 namespace web.Controllers
 {
+    [Route("page/quiz")]
     public class QuizController : ViewBaseController
     {
         private readonly QuizApiController qac;
