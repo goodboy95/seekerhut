@@ -16,6 +16,6 @@ namespace Domain.Entity
         public JsonObject<Dictionary<long, int>> AwardGoldInfo { get; set; }
         public JsonObject<List<long>> VisibleUserID { get; set; }
         public JsonObject<List<FileMetaEntity>> Attachments { get; set; }
-        public JsonObject<HashSet<string>> Tags { get; set; }
+        public JsonObject<HashSet<long>> Tags { get; set; }
     }
 }

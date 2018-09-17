@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace Domain.Mapping
 {
-    public static class BlogTagRelationMap
+    public static class BlogTagsMap
     {
-        public static void MapBlogTagRelation(this ModelBuilder modelBuilder)
+        public static void MapBlogTags(this ModelBuilder modelBuilder)
         {
-            var entity = modelBuilder.Entity<BlogTagRelationEntity>();
+            var entity = modelBuilder.Entity<BlogTagsEntity>();
 
-            entity.ToTable("blog_tag_relation");
+            entity.ToTable("blog_tags");
             entity.HasKey(p => p.ID);
             entity.Property(p => p.ID).HasColumnName("id").UseMySqlIdentityColumn();
             entity.Property(p => p.CreateTime).HasColumnName("create_time");

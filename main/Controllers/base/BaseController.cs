@@ -46,7 +46,6 @@ namespace web.Controllers
             {
                 LoginFail(context);
             }
-            ViewBag.wwwroot = "http://local.seekerhut.com";
         }
         public override void OnActionExecuted(ActionExecutedContext context)
         {
