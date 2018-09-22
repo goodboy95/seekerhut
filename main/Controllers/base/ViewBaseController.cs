@@ -17,7 +17,7 @@ namespace web.Controllers
         }
         protected override void LoginFail(ActionExecutingContext context)
         {
-            context.Result = Redirect("/home/logout/");
+            context.Result = Redirect("/page/home/logout/");
         }
     }
 }

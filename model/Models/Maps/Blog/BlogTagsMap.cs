@@ -18,7 +18,6 @@ namespace Domain.Mapping
             entity.Property(p => p.IsDeleted).HasColumnName("is_deleted");
             entity.Property(p => p.TagName).HasColumnName("tag_name");
             entity.Property(p => p.UserID).HasColumnName("user_id");
-            entity.Property(p => p.BlogIDList).HasColumnName("blog_idlist").IsRequired();
             
         }
     }

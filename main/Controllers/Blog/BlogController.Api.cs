@@ -91,18 +91,13 @@ namespace web.Api.Controllers
             var blog = new BlogEntity { ID = id, Title = title, AuthorID = userID, Privacy = privacy, VisibleUserID = new List<long>(), Tags = tagSet, 
                                                 LikeNum = 0, Content = content, Attachments = new List<FileMetaEntity>(), LikeID = new HashSet<long>(),
                                                 DislikeID = new HashSet<long>(), AwardGoldInfo = new Dictionary<long, int>() };
+            var oriBlogTags = dbc.Blog.Find(id)?.Tags.Object ?? new HashSet<long>();
             dbc.Blog.Save(blog);
-            dbc.SaveChanges();  //提前保存一遍，以便获取博客的id
-            //var tagList = dbc.BlogTags.Where(tr => tagSet.Contains(tr.ID)).ToList();
-            var tagList = dbc.BlogTags.Where()
-            foreach (var tag in tagList)
-            {
-                var tagBlogSet = tag.BlogIDList.Object;
-                tagBlogSet.Add(blog.ID);
-                tag.BlogIDList = tagBlogSet;
-                dbc.BlogTags.Save(tag);
-                tagSet
-            }
+            if (id <= 0) { dbc.SaveChanges(); }  //提前保存一遍，以便获取博客的id
+            var addTags = tagSet.Except(oriBlogTags);
+            var removeTags = oriBlogTags.Except(tagSet);
+            dbc.BlogTagRelation.RemoveRange(dbc.BlogTagRelation.Find(removeTags.ToArray()));
+            dbc.BlogTagRelation.AddRange(addTags.Select(tid => new BlogTagRelationEntity() { BlogId = blog.ID, TagId = tid }));
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
         }
@@ -136,10 +131,17 @@ namespace web.Api.Controllers
         /// <param name="userID"></param>
         /// <returns></returns>
         [HttpGet("blogsByTag")]
-        public JsonReturn GetBlogsByTag([FromQuery]string tagName, [FromQuery]long userID)
+        public JsonReturn GetBlogsByTag([FromQuery]string tagName, [FromQuery]long userID = 0)
         {
-            var blogList = (from bl in dbc.BlogTags where bl.TagName == tagName && bl.UserID == userID select bl.BlogIDList).FirstOrDefault();
-            if (blogList == null) { blogList = new List<long>(); }
+            var blogIdList = dbc.BlogTags.Where(t => t.TagName == tagName && (t.UserID == userID || 0 == userID))
+                .Join(dbc.BlogTagRelation, t => t.ID, btr => btr.TagId, (t, btr) => btr.BlogId );
+            var blogList = dbc.Blog.Where(b => blogIdList.Contains(b.ID))
+                .Join(dbc.User, b => b.AuthorID, u => u.ID, (b, u) => new {
+                    authorName = u.Name,
+                    blogName = b.Title,
+                    blogId = b.ID,
+                    likeNum = b.LikeNum
+                });
             return JsonReturn.ReturnSuccess(blogList);
         }
         /// <summary>

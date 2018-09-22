@@ -22,14 +22,19 @@ namespace web.Controllers
         { 
             qac = new QuizApiController(dbc, logFac, svp);
         }
+        [HttpGet("index")]
         public IActionResult Index() => View();
+        [HttpGet("quiz_manage")]
         public IActionResult QuizManage() => View();
+        [HttpGet("answer_view")]
         public IActionResult AnswerView() => View();
+        [HttpGet("create_quiz")]
         public IActionResult CreateQuiz([FromRoute]int id)
         {
             ViewBag.quesGroupId = id;
             return View();
         }
+        [HttpGet("quiz_page")]
         public IActionResult QuizPage([FromRoute]int id)
         {
             ViewBag.quizID = id;
