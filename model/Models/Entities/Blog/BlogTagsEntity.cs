@@ -8,6 +8,5 @@ namespace Domain.Entity
     {
         public string TagName { get; set; }
         public long UserID { get; set; }
-        public JsonObject<HashSet<long>> BlogIDList { get; set; }
     }
 }
