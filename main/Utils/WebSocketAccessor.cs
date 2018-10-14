@@ -52,13 +52,7 @@ namespace Utils
                             webSocket.SendAsync(new ArraySegment<byte>(System.Text.Encoding.UTF8.GetBytes(msg)),
                                                 WebSocketMessageType.Text, true, CancellationToken.None);
                         }
-                        else
-                        {
-                            webSocket.SendAsync(new ArraySegment<byte>(System.Text.Encoding.UTF8.GetBytes("")),
-                                                WebSocketMessageType.Text, true, CancellationToken.None);
-                        }
                     }
-                    webSocket.ReceiveAsync(new ArraySegment<byte>(acceptArr), CancellationToken.None);
                     Thread.Sleep(10000);
                     if (acceptArr.Where(i => i != 0).FirstOrDefault() == 0) { return; }
                     Array.Clear(acceptArr, 0, acceptArr.Length);

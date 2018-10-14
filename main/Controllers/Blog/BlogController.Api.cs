@@ -82,7 +82,7 @@ namespace web.Api.Controllers
         [HttpPost("blog")]
         public JsonReturn SaveBlog(long id, string title, string content, int privacy, string tags)
         {
-            var tagSet = new HashSet<long>(tags.Split(',').Select(t => long.Parse(t)));
+            var tagSet = new HashSet<long>(tags?.Split(',').Select(t => long.Parse(t)) ?? new long[0]);
             if (title == null || content == null)
             {
                 return JsonReturn.ReturnFail("你有未输入的部分，无法提交！");
@@ -96,7 +96,7 @@ namespace web.Api.Controllers
             if (id <= 0) { dbc.SaveChanges(); }  //提前保存一遍，以便获取博客的id
             var addTags = tagSet.Except(oriBlogTags);
             var removeTags = oriBlogTags.Except(tagSet);
-            dbc.BlogTagRelation.RemoveRange(dbc.BlogTagRelation.Find(removeTags.ToArray()));
+            dbc.BlogTagRelation.RemoveRange(dbc.BlogTagRelation.Where(btr => removeTags.ToArray().Contains(btr.ID)));
             dbc.BlogTagRelation.AddRange(addTags.Select(tid => new BlogTagRelationEntity() { BlogId = blog.ID, TagId = tid }));
             dbc.SaveChanges();
             return JsonReturn.ReturnSuccess();
