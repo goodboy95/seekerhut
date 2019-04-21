@@ -16,6 +16,7 @@ using Pomelo.EntityFrameworkCore.MySql;
 using StackExchange.Redis;
 using System;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.OpenApi.Models;
 
 namespace web
 {
@@ -25,8 +26,8 @@ namespace web
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+                //.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -39,10 +40,10 @@ namespace web
             // Add framework services.
             services.AddMvc(options => {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
+            }).AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "seekerhut API", Version = "0.3" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "seekerhut API", Version = "0.3" });
                 c.IncludeXmlComments(AppContext.BaseDirectory + "/apis.xml");
             });
             services.AddDbContext<DwDbContext>(options => options.UseMySql(Configuration.GetConnectionString("mysql")));
@@ -52,9 +53,7 @@ namespace web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DwDbContext dbc)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-            loggerFactory.AddNLog().AddDebug();
+            loggerFactory.AddNLog();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
